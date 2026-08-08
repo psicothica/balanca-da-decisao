@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Balança da Decisão — Psicothica</title>
+<meta name="description" content="Organize decisões difíceis: liste opções, pese prós e contras e enxergue para onde a balança se inclina — sem que o número decida por você.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   ECOSSISTEMA PSICOTHICA — Design System
+   Tokens globais: cor, tipografia, espaço, movimento
+   ============================================================ */
+
+:root {
+  /* --- Profundidade (fundos e grandes áreas) --- */
+  --azul-marinho: #0B132B;
+  --azul-marinho-900: #070E1F;
+  --azul-marinho-700: #131F45;
+  --verde-petroleo: #0B2524;
+  --verde-petroleo-600: #003B36;
+  --verde-petroleo-400: #0A4B44;
+
+  /* --- Força e coragem (ação, foco, impacto) --- */
+  --bordo: #5C061C;
+  --bordo-escuro: #4A0E17;
+  --magenta: #D11A5B;
+  --magenta-alt: #C11296;
+  --magenta-claro: #FF4E86;
+
+  /* --- Neutros --- */
+  --branco: #F4F6FB;
+  --cinza-claro: #C6CEDF;
+  --cinza-medio: #8D99B4;
+  --cinza-linha: rgba(198, 206, 223, 0.14);
+
+  /* --- Superfícies --- */
+  --superficie: rgba(255, 255, 255, 0.045);
+  --superficie-forte: rgba(255, 255, 255, 0.075);
+  --vidro: blur(14px) saturate(130%);
+
+  /* --- Verde calmo (equilíbrio, prós) --- */
+  --teal: #17A398;
+  --teal-fundo: #0F5E6E;
+
+  /* --- Gradientes assinatura --- */
+  --grad-profundidade: linear-gradient(145deg, #0B132B 0%, #0A1E2E 45%, #0B2524 100%);
+  --grad-sinapse: linear-gradient(120deg, var(--bordo) 0%, var(--magenta) 55%, var(--magenta-alt) 100%);
+  --grad-calma: linear-gradient(120deg, var(--verde-petroleo-600) 0%, #0F5E6E 100%);
+
+  /* --- Tipografia --- */
+  --fonte-display: 'Syne', 'Montserrat', system-ui, sans-serif;
+  --fonte-texto: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+
+  --t-hero: clamp(2.4rem, 6vw, 4.4rem);
+  --t-h1: clamp(2rem, 4.5vw, 3.2rem);
+  --t-h2: clamp(1.45rem, 3vw, 2.1rem);
+  --t-h3: 1.15rem;
+  --t-corpo: 1.02rem;
+  --t-nota: 0.86rem;
+  --t-eyebrow: 0.74rem;
+
+  /* --- Espaço e forma --- */
+  --raio-p: 10px;
+  --raio-m: 18px;
+  --raio-g: 28px;
+  --secao: clamp(3rem, 7vw, 5rem);
+  --max: 1180px;
+
+  /* --- Movimento --- */
+  --transicao: 340ms cubic-bezier(.22, 1, .36, 1);
+  --transicao-rapida: 180ms ease-out;
+  --sombra-profunda: 0 26px 70px rgba(3, 8, 20, 0.55);
+  --brilho-magenta: 0 0 32px rgba(209, 26, 91, 0.38);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--azul-marinho-900);
+  color: var(--branco);
+  font-family: var(--fonte-texto);
+  font-size: var(--t-corpo);
+  line-height: 1.62;
+  letter-spacing: 0.005em;
+  -webkit-font-smoothing: antialiased;
+}
+
+#neural { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+
+.fundo-profundo {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(1100px 700px at 12% -10%, rgba(0, 59, 54, .55), transparent 60%),
+    radial-gradient(900px 620px at 92% 8%, rgba(92, 6, 28, .48), transparent 62%),
+    radial-gradient(760px 620px at 50% 110%, rgba(193, 18, 150, .18), transparent 65%),
+    var(--grad-profundidade);
+}
+
+.conteudo { position: relative; z-index: 1; }
+
+.envelope { width: min(100% - 2.4rem, var(--max)); margin-inline: auto; }
+
+h1, h2, h3, h4 {
+  font-family: var(--fonte-display);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.6em;
+}
+h1 { font-size: var(--t-h1); }
+h2 { font-size: var(--t-h2); }
+h3 { font-size: var(--t-h3); letter-spacing: -0.01em; }
+
+p { margin: 0 0 1.1em; color: var(--cinza-claro); }
+strong { color: var(--branco); font-weight: 600; }
+a { color: var(--magenta-claro); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+
+.eyebrow {
+  font-family: var(--fonte-texto);
+  font-size: var(--t-eyebrow);
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--magenta-claro);
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 1rem;
+}
+.eyebrow::before { content: ""; width: 34px; height: 1px; background: var(--grad-sinapse); }
+
+.nota { font-size: var(--t-nota); color: var(--cinza-medio); }
+
+.cartao {
+  position: relative;
+  background: var(--superficie);
+  border: 1px solid var(--cinza-linha);
+  border-radius: var(--raio-m);
+  padding: 1.6rem;
+  backdrop-filter: var(--vidro);
+  -webkit-backdrop-filter: var(--vidro);
+  transition: transform var(--transicao), border-color var(--transicao), background var(--transicao);
+}
+.cartao:hover { border-color: rgba(209, 26, 91, .38); background: var(--superficie-forte); }
+
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .6rem;
+  font-family: var(--fonte-texto);
+  font-size: .92rem;
+  font-weight: 700;
+  letter-spacing: .03em;
+  padding: .85rem 1.5rem;
+  border-radius: 100px;
+  border: 1px solid transparent;
+  background: var(--grad-sinapse);
+  color: #fff;
+  cursor: pointer;
+  transition: transform var(--transicao-rapida), box-shadow var(--transicao), filter var(--transicao-rapida);
+}
+.botao:hover { transform: translateY(-2px); box-shadow: var(--brilho-magenta); }
+.botao:active { transform: translateY(0); }
+.botao--fantasma { background: transparent; border-color: rgba(198, 206, 223, .28); color: var(--branco); }
+.botao--fantasma:hover { border-color: var(--magenta); box-shadow: none; }
+.botao--calmo { background: var(--grad-calma); }
+
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--magenta-claro);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+input, textarea, select {
+  font-family: var(--fonte-texto);
+  font-size: .95rem;
+  color: var(--branco);
+  background: rgba(7, 14, 31, .6);
+  border: 1px solid var(--cinza-linha);
+  border-radius: var(--raio-p);
+  padding: .75rem .9rem;
+  width: 100%;
+  transition: border-color var(--transicao-rapida);
+}
+input:focus, textarea:focus, select:focus { border-color: var(--magenta); }
+::placeholder { color: rgba(141, 153, 180, .75); }
+textarea { resize: vertical; }
+
+.rodape {
+  border-top: 1px solid var(--cinza-linha);
+  padding: 2.4rem 0 3rem;
+  margin-top: var(--secao);
+  font-size: var(--t-nota);
+  color: var(--cinza-medio);
+  text-align: center;
+}
+.rodape a { font-weight: 600; }
+
+.oculto { display: none !important; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.aviso {
+  border-left: 3px solid var(--magenta);
+  background: rgba(92,6,28,.28);
+  border-radius: var(--raio-p);
+  padding: 1rem 1.2rem;
+  font-size: .92rem;
+  color: var(--cinza-claro);
+  margin-top: 1.6rem;
+}
+.aviso p:last-child { margin-bottom: 0; }
+.aviso--calmo { border-left-color: var(--teal); background: rgba(15,94,110,.24); }
+
+/* ============================================================
+   A BALANÇA DA DECISÃO — estilos específicos
+   ============================================================ */
+
+/* --- Cabeçalho + abas --- */
+.topo-app {
+  position: sticky; top: 0; z-index: 20;
+  background: rgba(7, 14, 31, .72);
+  backdrop-filter: var(--vidro);
+  -webkit-backdrop-filter: var(--vidro);
+  border-bottom: 1px solid var(--cinza-linha);
+}
+.topo-app > .envelope { padding: .8rem 0; }
+.marca {
+  display: flex; align-items: center; gap: .6rem;
+  font-family: var(--fonte-display); font-weight: 800; font-size: .95rem; letter-spacing: .02em;
+}
+.marca .nodo { width: 10px; height: 10px; border-radius: 50%; background: var(--grad-sinapse); box-shadow: 0 0 12px rgba(209,26,91,.7); flex: none; }
+.marca span { color: var(--cinza-medio); font-weight: 600; font-size: .8rem; }
+
+.abas {
+  display: flex; gap: .3rem; margin-top: .7rem; flex-wrap: nowrap;
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.abas::-webkit-scrollbar { display: none; }
+.aba {
+  font-family: var(--fonte-texto);
+  font-size: .82rem; font-weight: 600; white-space: nowrap;
+  color: var(--cinza-claro);
+  background: transparent; border: 1px solid transparent;
+  padding: .5rem .95rem; border-radius: 100px; cursor: pointer;
+  transition: background var(--transicao-rapida), color var(--transicao-rapida), border-color var(--transicao-rapida);
+}
+.aba:hover { background: var(--superficie-forte); color: #fff; }
+.aba[aria-selected="true"] { background: var(--grad-sinapse); color: #fff; }
+
+/* --- Painéis --- */
+.painel { display: none; padding-block: var(--secao); }
+.painel.ativo { display: block; animation: surge .32s ease-out; }
+@keyframes surge { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.hero-mini { max-width: 60ch; }
+.hero-mini h1 { font-size: var(--t-hero); max-width: 18ch; }
+.hero-mini h1 em { font-style: normal; background: var(--grad-sinapse); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero-mini p { font-size: 1.06rem; max-width: 54ch; }
+.hero-mini .acoes { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.6rem; }
+
+.trio { display: grid; gap: 1.1rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin-top: 2rem; }
+.trio h3 { margin-bottom: .5rem; }
+.trio p { font-size: .95rem; margin: 0; }
+.trio .marcador { font-family: var(--fonte-display); font-size: 1.9rem; font-weight: 800; line-height: 1; background: var(--grad-sinapse); -webkit-background-clip: text; background-clip: text; color: transparent; display: block; margin-bottom: .5rem; }
+
+/* --- Barra de controle da decisão --- */
+.barra-decisao {
+  display: flex; flex-wrap: wrap; gap: .8rem; align-items: end;
+  margin-bottom: 1.6rem;
+}
+.barra-decisao .campo-select { flex: 1 1 240px; min-width: 200px; }
+.barra-decisao label { display: block; font-size: .78rem; font-weight: 600; color: var(--cinza-medio); margin-bottom: .35rem; }
+
+.campo-titulo {
+  font-family: var(--fonte-display);
+  font-size: clamp(1.3rem, 3vw, 1.9rem);
+  font-weight: 700;
+  padding: .6rem .9rem;
+  margin-bottom: 1.8rem;
+}
+
+/* --- Grade de opções --- */
+.grade-opcoes { display: grid; gap: 1.2rem; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); align-items: start; }
+
+.opcao { padding: 1.3rem 1.35rem 1.5rem; }
+.opcao-cabeca { display: flex; align-items: center; gap: .6rem; margin-bottom: 1rem; }
+.opcao-nome { font-family: var(--fonte-display); font-weight: 700; font-size: 1.05rem; padding: .55rem .8rem; }
+.mini {
+  flex: none; background: none; border: 0; color: var(--cinza-medio);
+  cursor: pointer; font-size: .74rem; font-weight: 600; padding: .35rem .5rem; border-radius: 8px;
+  transition: color var(--transicao-rapida), background var(--transicao-rapida);
+}
+.mini:hover { color: var(--magenta-claro); background: var(--superficie-forte); }
+
+.fatores { display: grid; gap: 1.1rem; }
+.coluna-fatores h4 {
+  font-family: var(--fonte-texto); font-size: .72rem; font-weight: 700; letter-spacing: .16em;
+  text-transform: uppercase; margin: 0 0 .6rem;
+}
+.coluna-fatores.pro h4 { color: var(--teal); }
+.coluna-fatores.contra h4 { color: var(--magenta-claro); }
+
+.fator {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: .5rem .6rem;
+  align-items: center;
+  padding: .55rem .6rem;
+  border: 1px solid var(--cinza-linha);
+  border-radius: var(--raio-p);
+  background: rgba(7,14,31,.4);
+  margin-bottom: .55rem;
+}
+.fator-texto { font-size: .9rem; padding: .5rem .65rem; }
+.fator-remover { grid-column: 2; }
+.fator-peso-linha { grid-column: 1 / -1; display: flex; align-items: center; gap: .6rem; }
+.fator-peso-linha .rot { font-size: .7rem; color: var(--cinza-medio); white-space: nowrap; }
+.fator-peso-linha input[type="range"] { padding: 0; }
+.peso-valor { font-family: var(--fonte-display); font-weight: 800; font-size: .95rem; min-width: 1.1ch; text-align: center; }
+.coluna-fatores.pro .peso-valor { color: var(--teal); }
+.coluna-fatores.contra .peso-valor { color: var(--magenta-claro); }
+input[type="range"] { accent-color: var(--magenta); }
+.coluna-fatores.pro input[type="range"] { accent-color: var(--teal); }
+
+.add-fator {
+  width: 100%; text-align: center;
+  font-size: .8rem; font-weight: 600; color: var(--cinza-claro);
+  background: transparent; border: 1px dashed var(--cinza-linha); border-radius: var(--raio-p);
+  padding: .55rem; cursor: pointer;
+  transition: border-color var(--transicao-rapida), color var(--transicao-rapida);
+}
+.add-fator:hover { border-color: var(--magenta); color: #fff; }
+
+.placar {
+  display: flex; flex-wrap: wrap; gap: .5rem 1.1rem; align-items: baseline;
+  margin: 1.2rem 0 .4rem; padding-top: 1rem; border-top: 1px solid var(--cinza-linha);
+  font-size: .82rem; color: var(--cinza-medio);
+}
+.placar b { color: var(--branco); font-weight: 600; }
+.placar .saldo { font-family: var(--fonte-display); font-weight: 800; font-size: 1.4rem; margin-left: auto; }
+.saldo.pos { color: var(--teal); }
+.saldo.neg { color: var(--magenta-claro); }
+.saldo.zero { color: var(--cinza-medio); }
+
+.intuicao-bloco { margin-top: 1.2rem; }
+.intuicao-bloco label { display: block; font-size: .8rem; color: var(--cinza-claro); margin-bottom: .5rem; }
+.intuicao-bloco .val { font-family: var(--fonte-display); font-weight: 800; color: var(--magenta-claro); }
+
+.linha-add-opcao { margin-top: 1.6rem; }
+
+/* --- Comparar --- */
+.linha-comparar { padding: 1.15rem 1.25rem; margin-bottom: .9rem; }
+.linha-comparar.destaque { border-color: rgba(23,163,152,.5); box-shadow: 0 0 0 1px rgba(23,163,152,.25), 0 18px 40px rgba(3,8,20,.4); }
+.linha-comparar .topo-linha { display: flex; align-items: baseline; gap: .7rem; margin-bottom: .7rem; flex-wrap: wrap; }
+.linha-comparar .nome-opcao { font-family: var(--fonte-display); font-weight: 700; font-size: 1.05rem; }
+.selo {
+  font-size: .64rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  padding: .2rem .55rem; border-radius: 100px; background: rgba(23,163,152,.18); color: var(--teal);
+}
+.linha-comparar .saldo-num { font-family: var(--fonte-display); font-weight: 800; font-size: 1.3rem; margin-left: auto; }
+
+.balanca {
+  display: flex; align-items: stretch; height: 26px;
+  border-radius: 8px; overflow: hidden; background: rgba(7,14,31,.5);
+  border: 1px solid var(--cinza-linha);
+}
+.balanca-lado { flex: 1; display: flex; height: 100%; }
+.balanca-lado.contra { justify-content: flex-end; border-right: 2px solid rgba(244,246,251,.28); }
+.balanca-barra { height: 100%; transition: width var(--transicao); }
+.balanca-barra.contra { background: linear-gradient(90deg, rgba(209,26,91,.2), var(--magenta)); border-radius: 6px 0 0 6px; }
+.balanca-barra.pro { background: linear-gradient(90deg, var(--teal-fundo), var(--teal)); border-radius: 0 6px 6px 0; }
+.legenda-balanca { display: flex; justify-content: space-between; font-size: .72rem; color: var(--cinza-medio); margin-top: .45rem; }
+
+.medidor-intuicao { display: flex; align-items: center; gap: .5rem; margin-top: .7rem; font-size: .78rem; color: var(--cinza-medio); }
+.medidor-intuicao .trilho { flex: 1; height: 5px; border-radius: 100px; background: rgba(198,206,223,.16); overflow: hidden; }
+.medidor-intuicao .trilho i { display: block; height: 100%; background: var(--grad-sinapse); }
+
+/* --- Gut check / reflexão --- */
+.gutcheck { margin-top: 2.4rem; }
+.gutcheck ol { padding-left: 1.2rem; }
+.gutcheck li { margin-bottom: .6rem; color: var(--cinza-claro); font-size: .95rem; }
+.gutcheck textarea { margin-top: 1rem; }
+
+/* --- Histórico --- */
+.item-historico {
+  display: flex; align-items: center; gap: .9rem; flex-wrap: wrap;
+  padding: 1rem 1.2rem; margin-bottom: .8rem;
+}
+.item-historico .info { flex: 1 1 240px; }
+.item-historico .info strong { display: block; font-family: var(--fonte-display); font-size: 1.02rem; }
+.item-historico .info .meta { font-size: .78rem; color: var(--cinza-medio); margin-top: .2rem; }
+.item-historico .acoes-item { display: flex; gap: .5rem; margin-left: auto; }
+.btn-mini {
+  font-size: .78rem; font-weight: 600; padding: .5rem .9rem; border-radius: 100px; cursor: pointer;
+  background: transparent; border: 1px solid var(--cinza-linha); color: var(--cinza-claro);
+  transition: all var(--transicao-rapida);
+}
+.btn-mini:hover { border-color: var(--magenta); color: #fff; }
+
+.vazio { font-size: .95rem; color: var(--cinza-medio); padding: 1.4rem; text-align: center; border: 1px dashed var(--cinza-linha); border-radius: var(--raio-m); }
+.backup-linha { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1.8rem; }
+
+.aviso-armazenamento { margin: 0 0 1.6rem; }
+
+@media (max-width: 560px) {
+  .fator { grid-template-columns: 1fr; }
+  .fator-remover { grid-column: 1; justify-self: end; }
+}
+</style>
+</head>
+<body id="topo">
+<div class="fundo-profundo"></div>
+<canvas id="neural" data-densidade="0.8" aria-hidden="true"></canvas>
+
+<div class="conteudo">
+  <header class="topo-app">
+    <div class="envelope">
+      <div class="marca">
+        <span class="nodo" aria-hidden="true"></span>
+        A Balança da Decisão
+        <span>· Psicothica</span>
+      </div>
+      <div class="abas" role="tablist" aria-label="Seções da ferramenta">
+        <button class="aba" role="tab" type="button" data-ir="painel-entender" aria-selected="true" aria-controls="painel-entender">Entender</button>
+        <button class="aba" role="tab" type="button" data-ir="painel-decidir" aria-selected="false" aria-controls="painel-decidir" tabindex="-1">Minha decisão</button>
+        <button class="aba" role="tab" type="button" data-ir="painel-comparar" aria-selected="false" aria-controls="painel-comparar" tabindex="-1">Comparar</button>
+        <button class="aba" role="tab" type="button" data-ir="painel-historico" aria-selected="false" aria-controls="painel-historico" tabindex="-1">Histórico</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="envelope">
+
+    <!-- ENTENDER -->
+    <section class="painel ativo" id="painel-entender" role="tabpanel" aria-labelledby="aba-entender" tabindex="0">
+      <div class="hero-mini">
+        <p class="eyebrow">Tomada de decisão</p>
+        <h1>Decidir é escolher um caminho sem poder ver o <em>fim dele</em>.</h1>
+        <p>Por isso trava. Esta ferramenta não decide por você — ela tira a decisão de dentro da sua cabeça, onde tudo pesa ao mesmo tempo, e a coloca na frente dos seus olhos, onde dá para pesar uma coisa de cada vez.</p>
+        <div class="acoes">
+          <button class="botao" type="button" data-ir="painel-decidir">Montar minha decisão</button>
+          <button class="botao botao--fantasma" type="button" data-ir="painel-comparar">Ver a comparação</button>
+        </div>
+      </div>
+
+      <div class="trio">
+        <article class="cartao">
+          <span class="marcador" aria-hidden="true">01</span>
+          <h3>Por que decisões travam</h3>
+          <p>A mente tenta segurar todos os prós, todos os contras e todo o medo de errar de uma vez só. Isso sobrecarrega e paralisa — especialmente quando a ansiedade exige certeza absoluta antes de qualquer passo. Escrever descarrega esse peso.</p>
+        </article>
+        <article class="cartao">
+          <span class="marcador" aria-hidden="true">02</span>
+          <h3>O que a balança faz</h3>
+          <p>Você lista as opções, aponta o que joga a favor e o que joga contra em cada uma, e diz o quanto cada ponto realmente pesa. Nem todo pró vale o mesmo: um detalhe pequeno e um valor inegociável não podem contar igual.</p>
+        </article>
+        <article class="cartao">
+          <span class="marcador" aria-hidden="true">03</span>
+          <h3>Cabeça e intuição</h3>
+          <p>Além dos pesos, você registra o quanto uma parte de você <em>quer</em> cada opção. Quando a conta e a vontade apontam para lados diferentes, esse desencontro não é ruído — é uma informação importante sobre o que importa para você.</p>
+        </article>
+      </div>
+
+      <div class="aviso aviso--calmo">
+        <p><strong>O número orienta, não manda.</strong> O saldo da balança é um mapa para pensar com mais clareza, não um veredito. Quem decide é você — inclusive decidir contra a soma, se ao ver o resultado sentir que ele não traduz o que é importante. Esta é uma ferramenta educativa e de organização, não substitui acompanhamento psicológico. Tudo o que você escreve fica salvo apenas neste navegador.</p>
+      </div>
+    </section>
+
+    <!-- MINHA DECISÃO -->
+    <section class="painel" id="painel-decidir" role="tabpanel" aria-labelledby="aba-decidir" tabindex="0">
+      <p class="eyebrow">Minha decisão</p>
+      <div id="aviso-armazenamento-slot"></div>
+      <div id="workspace"></div>
+    </section>
+
+    <!-- COMPARAR -->
+    <section class="painel" id="painel-comparar" role="tabpanel" aria-labelledby="aba-comparar" tabindex="0">
+      <p class="eyebrow">Comparar</p>
+      <h2>Para onde a balança se inclina.</h2>
+      <p style="max-width:60ch">As barras mostram o peso somado dos contras (à esquerda) e dos prós (à direita) de cada opção. O saldo é a diferença entre os dois lados. Lembre-se: a opção com maior saldo é a mais bem justificada no papel — não necessariamente a certa para você.</p>
+      <div id="comparar-conteudo"></div>
+    </section>
+
+    <!-- HISTÓRICO -->
+    <section class="painel" id="painel-historico" role="tabpanel" aria-labelledby="aba-historico" tabindex="0">
+      <p class="eyebrow">Histórico</p>
+      <h2>Suas decisões salvas.</h2>
+      <p style="max-width:60ch">Cada decisão que você monta fica guardada aqui, apenas no seu navegador. Você pode reabrir, remover ou levar um backup para outro dispositivo — ou para uma consulta.</p>
+      <div id="historico-conteudo"></div>
+
+      <div class="backup-linha">
+        <button class="botao botao--fantasma" type="button" data-acao="exportar">Exportar backup (.json)</button>
+        <button class="botao botao--fantasma" type="button" data-acao="importar">Importar backup</button>
+        <input type="file" id="arquivo-backup" accept="application/json" class="sr-only">
+      </div>
+    </section>
+  </main>
+
+  <footer class="envelope rodape">
+    <p style="font-family:var(--fonte-texto)">Este recurso foi desenvolvido como ferramenta complementar ao processo terapêutico pela psicóloga <strong>Alanne Raquel Fragoso de Farias — CRP 13/9646</strong>.</p>
+    <p class="nota" style="max-width:62ch;margin:0 auto 1.1rem">Aviso Legal: este aplicativo é uma ferramenta educacional e informativa. Ele não fornece aconselhamento psicológico, diagnóstico ou tratamento, nem substitui a avaliação e o acompanhamento de um profissional de saúde mental qualificado. Ao perceber sintomas que afetam negativamente áreas importantes da sua vida, procure ajuda profissional.</p>
+    <p>Entre em contato para quaisquer dúvidas ou orientações: <a href="https://instagram.com/psicothica" target="_blank" rel="noopener">@psicothica</a></p>
+    <p class="nota" style="margin-top:1.2rem">Ecossistema Psicothica · A Jornada do Ser · comunidade AyA</p>
+  </footer>
+</div>
+
+<script>
+/* ============================================================
+   PSICOTHICA — Malha neural viva
+   ============================================================ */
+(function () {
+  const canvas = document.getElementById('neural');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const semMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const densidade = parseFloat(canvas.dataset.densidade || '1');
+  const TOM = { magenta: [209, 26, 91], petroleo: [15, 120, 128], bordo: [140, 20, 55] };
+  let largura, altura, nos = [], pulsos = [], raf;
+  const ponteiro = { x: -9999, y: -9999, ativo: false };
+
+  function dimensionar() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    largura = canvas.clientWidth;
+    altura = canvas.clientHeight;
+    canvas.width = largura * dpr;
+    canvas.height = altura * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    semear();
+  }
+  function semear() {
+    const alvo = Math.round((largura * altura) / 20000 * densidade);
+    const total = Math.max(28, Math.min(alvo, 120));
+    nos = Array.from({ length: total }, () => ({
+      x: Math.random() * largura,
+      y: Math.random() * altura,
+      vx: (Math.random() - 0.5) * 0.24,
+      vy: (Math.random() - 0.5) * 0.24,
+      r: Math.random() * 1.7 + 0.9,
+      fase: Math.random() * Math.PI * 2,
+      cor: Math.random() > 0.72 ? TOM.magenta : (Math.random() > 0.5 ? TOM.petroleo : TOM.bordo)
+    }));
+  }
+  const DIST = 155;
+  function passo(tempo) {
+    ctx.clearRect(0, 0, largura, altura);
+    for (const n of nos) {
+      n.x += n.vx; n.y += n.vy;
+      if (n.x < -40) n.x = largura + 40;
+      if (n.x > largura + 40) n.x = -40;
+      if (n.y < -40) n.y = altura + 40;
+      if (n.y > altura + 40) n.y = -40;
+      if (ponteiro.ativo) {
+        const dx = n.x - ponteiro.x, dy = n.y - ponteiro.y;
+        const d = Math.hypot(dx, dy);
+        if (d < 150 && d > 0.1) { n.x += (dx / d) * 0.55; n.y += (dy / d) * 0.55; }
+      }
+    }
+    for (let i = 0; i < nos.length; i++) {
+      for (let j = i + 1; j < nos.length; j++) {
+        const a = nos[i], b = nos[j];
+        const d = Math.hypot(a.x - b.x, a.y - b.y);
+        if (d > DIST) continue;
+        const forca = 1 - d / DIST;
+        const grad = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
+        grad.addColorStop(0, `rgba(${a.cor.join(',')},${forca * 0.34})`);
+        grad.addColorStop(1, `rgba(${b.cor.join(',')},${forca * 0.34})`);
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = forca * 1.15;
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.stroke();
+        if (!semMovimento && forca > 0.86 && Math.random() < 0.0016) pulsos.push({ a, b, t: 0 });
+      }
+    }
+    pulsos = pulsos.filter(p => p.t <= 1);
+    for (const p of pulsos) {
+      p.t += 0.02;
+      const x = p.a.x + (p.b.x - p.a.x) * p.t;
+      const y = p.a.y + (p.b.y - p.a.y) * p.t;
+      const halo = ctx.createRadialGradient(x, y, 0, x, y, 9);
+      halo.addColorStop(0, 'rgba(255,78,134,.85)');
+      halo.addColorStop(1, 'rgba(255,78,134,0)');
+      ctx.fillStyle = halo;
+      ctx.beginPath();
+      ctx.arc(x, y, 9, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    for (const n of nos) {
+      const brilho = semMovimento ? 0.55 : 0.5 + Math.sin(tempo / 900 + n.fase) * 0.32;
+      ctx.fillStyle = `rgba(${n.cor.join(',')},${0.32 + brilho * 0.4})`;
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    raf = requestAnimationFrame(passo);
+  }
+  window.addEventListener('resize', () => { cancelAnimationFrame(raf); dimensionar(); raf = requestAnimationFrame(passo); });
+  window.addEventListener('pointermove', e => { ponteiro.x = e.clientX; ponteiro.y = e.clientY; ponteiro.ativo = true; });
+  window.addEventListener('pointerleave', () => { ponteiro.ativo = false; });
+  dimensionar();
+  if (semMovimento) { passo(0); cancelAnimationFrame(raf); } else { raf = requestAnimationFrame(passo); }
+})();
+
+/* ============================================================
+   PSICOTHICA — Armazenamento local (com fallback em memória)
+   ============================================================ */
+window.Psicothica = window.Psicothica || {};
+window.Psicothica.dados = (function () {
+  const PREFIXO = 'psicothica:';
+  const memoria = new Map();
+  const persistente = (function () {
+    try {
+      const teste = PREFIXO + 'teste';
+      localStorage.setItem(teste, '1');
+      localStorage.removeItem(teste);
+      return true;
+    } catch (e) { return false; }
+  })();
+  function ler(chave, padrao) {
+    try {
+      const bruto = persistente ? localStorage.getItem(PREFIXO + chave) : memoria.get(chave);
+      return bruto ? JSON.parse(bruto) : padrao;
+    } catch (e) { return padrao; }
+  }
+  function salvar(chave, valor) {
+    const bruto = JSON.stringify(valor);
+    try {
+      if (persistente) localStorage.setItem(PREFIXO + chave, bruto);
+      else memoria.set(chave, bruto);
+      return true;
+    } catch (e) { memoria.set(chave, bruto); return true; }
+  }
+  function apagar(chave) {
+    if (persistente) localStorage.removeItem(PREFIXO + chave);
+    memoria.delete(chave);
+  }
+  function tudo() {
+    const pacote = { app: 'Ecossistema Psicothica', versao: 1, exportadoEm: new Date().toISOString(), dados: {} };
+    const adicionar = (chave, bruto) => { try { pacote.dados[chave] = JSON.parse(bruto); } catch (e) {} };
+    if (persistente) {
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith(PREFIXO)) adicionar(k.slice(PREFIXO.length), localStorage.getItem(k));
+      }
+    } else {
+      memoria.forEach((bruto, chave) => adicionar(chave, bruto));
+    }
+    return pacote;
+  }
+  function exportar(nomeArquivo) {
+    const blob = new Blob([JSON.stringify(tudo(), null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = nomeArquivo || `psicothica-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+  function importar(arquivo) {
+    return new Promise((resolve, reject) => {
+      const leitor = new FileReader();
+      leitor.onload = () => {
+        try {
+          const pacote = JSON.parse(leitor.result);
+          if (!pacote || typeof pacote.dados !== 'object') return reject(new Error('Este arquivo não é um backup do Psicothica.'));
+          Object.entries(pacote.dados).forEach(([k, v]) => salvar(k, v));
+          resolve(Object.keys(pacote.dados).length);
+        } catch (e) { reject(new Error('Não foi possível ler o arquivo. Verifique se ele está íntegro.')); }
+      };
+      leitor.onerror = () => reject(new Error('Falha ao abrir o arquivo.'));
+      leitor.readAsText(arquivo);
+    });
+  }
+  return { ler, salvar, apagar, tudo, exportar, importar, persistente };
+})();
+
+/* ============================================================
+   A BALANÇA DA DECISÃO — lógica
+   Opções · prós/contras ponderados · intuição · comparação
+   ============================================================ */
+(function () {
+  'use strict';
+  const dados = window.Psicothica.dados;
+  const $ = s => document.querySelector(s);
+
+  const CHAVE_LISTA = 'decisoes:lista';
+  const CHAVE_ATUAL = 'decisoes:atual';
+  const PESO_MIN = 1, PESO_MAX = 5, PESO_PADRAO = 3;
+
+  let estado = { decisoes: [], atualId: null };
+
+  const workspace = $('#workspace');
+  const comparar = $('#comparar-conteudo');
+  const historico = $('#historico-conteudo');
+  const campoArquivo = $('#arquivo-backup');
+
+  /* ---------- utilidades ---------- */
+  function novoId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+  function novoFator() { return { id: novoId(), texto: '', peso: PESO_PADRAO }; }
+  function novaOpcao() { return { id: novoId(), nome: '', intuicao: 5, pros: [], contras: [] }; }
+  function novaDecisao() {
+    const d = { id: novoId(), titulo: '', criadaEm: new Date().toISOString(), reflexao: '', opcoes: [] };
+    d.opcoes.push(novaOpcao());
+    d.opcoes.push(novaOpcao());
+    return d;
+  }
+  function decisaoAtual() { return estado.decisoes.find(d => d.id === estado.atualId) || null; }
+  function nomeOpcao(op, indice) { return (op.nome || '').trim() || ('Opção ' + (indice + 1)); }
+  function esc(txt) {
+    return String(txt == null ? '' : txt)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+  function computar(op) {
+    const somaPros = op.pros.reduce((s, f) => s + (Number(f.peso) || 0), 0);
+    const somaContras = op.contras.reduce((s, f) => s + (Number(f.peso) || 0), 0);
+    return { somaPros, somaContras, saldo: somaPros - somaContras };
+  }
+  function salvar() {
+    dados.salvar(CHAVE_LISTA, estado.decisoes);
+    dados.salvar(CHAVE_ATUAL, estado.atualId);
+  }
+
+  /* ---------- render: workspace (Minha decisão) ---------- */
+  function renderWorkspace() {
+    const d = decisaoAtual();
+    const opcoesSelect = estado.decisoes.map(dec => {
+      const rot = (dec.titulo || '').trim() || 'Decisão sem título';
+      return `<option value="${dec.id}"${dec.id === estado.atualId ? ' selected' : ''}>${esc(rot)}</option>`;
+    }).join('');
+
+    let html = `
+      <div class="barra-decisao">
+        <div class="campo-select">
+          <label for="seletor-decisao">Decisão em foco</label>
+          <select id="seletor-decisao" data-campo="selecionar-decisao">${opcoesSelect}</select>
+        </div>
+        <button class="botao" type="button" data-acao="nova-decisao">+ Nova decisão</button>
+      </div>`;
+
+    if (!d) { workspace.innerHTML = html; return; }
+
+    html += `<input class="campo-titulo" type="text" data-campo="titulo-decisao"
+      value="${esc(d.titulo)}" placeholder="Qual é a decisão? Ex.: Devo aceitar a nova proposta de emprego?"
+      aria-label="Título da decisão">`;
+
+    html += '<div class="grade-opcoes">';
+    d.opcoes.forEach((op, i) => {
+      const c = computar(op);
+      html += renderOpcao(op, i, c);
+    });
+    html += '</div>';
+
+    html += `<div class="linha-add-opcao">
+      <button class="botao botao--fantasma" type="button" data-acao="add-opcao">+ Adicionar opção</button>
+    </div>`;
+
+    workspace.innerHTML = html;
+  }
+
+  function renderOpcao(op, indice, c) {
+    const podeRemover = decisaoAtual().opcoes.length > 1;
+    return `
+      <article class="cartao opcao" data-op="${op.id}">
+        <div class="opcao-cabeca">
+          <input class="opcao-nome" type="text" data-campo="nome-opcao"
+            value="${esc(op.nome)}" placeholder="Opção ${indice + 1}" aria-label="Nome da opção ${indice + 1}">
+          ${podeRemover ? '<button class="mini" type="button" data-acao="remover-opcao" aria-label="Remover esta opção">remover</button>' : ''}
+        </div>
+        <div class="fatores">
+          <div class="coluna-fatores pro">
+            <h4>Prós — o que joga a favor</h4>
+            ${op.pros.map(f => renderFator(f, 'pro')).join('')}
+            <button class="add-fator" type="button" data-acao="add-pro">+ adicionar pró</button>
+          </div>
+          <div class="coluna-fatores contra">
+            <h4>Contras — o que joga contra</h4>
+            ${op.contras.map(f => renderFator(f, 'contra')).join('')}
+            <button class="add-fator" type="button" data-acao="add-contra">+ adicionar contra</button>
+          </div>
+        </div>
+        <div class="placar">
+          <span>prós <b data-somapros="${op.id}">${c.somaPros}</b></span>
+          <span>contras <b data-somacontras="${op.id}">${c.somaContras}</b></span>
+          <span class="saldo ${classeSaldo(c.saldo)}" data-saldo="${op.id}">${rotuloSaldo(c.saldo)}</span>
+        </div>
+        <div class="intuicao-bloco">
+          <label>Deixando a conta de lado, o quanto uma parte de você <em>quer</em> esta opção? — <span class="val" data-intuicao-label="${op.id}">${op.intuicao}</span>/10</label>
+          <input type="range" min="0" max="10" value="${op.intuicao}" data-campo="intuicao" aria-label="Intuição sobre a opção ${indice + 1}, de 0 a 10">
+        </div>
+      </article>`;
+  }
+
+  function renderFator(f, tipo) {
+    return `
+      <div class="fator" data-fator="${f.id}" data-tipo="${tipo}">
+        <input class="fator-texto" type="text" data-campo="texto-fator"
+          value="${esc(f.texto)}" placeholder="${tipo === 'pro' ? 'Ex.: salário maior' : 'Ex.: mudança de cidade'}"
+          aria-label="Descrição do fator">
+        <button class="mini fator-remover" type="button" data-acao="remover-fator" aria-label="Remover fator">×</button>
+        <div class="fator-peso-linha">
+          <span class="rot">o quanto pesa</span>
+          <input type="range" min="${PESO_MIN}" max="${PESO_MAX}" value="${f.peso}" data-campo="peso-fator" aria-label="Peso do fator, de ${PESO_MIN} a ${PESO_MAX}">
+          <span class="peso-valor" data-peso-label>${f.peso}</span>
+        </div>
+      </div>`;
+  }
+
+  function classeSaldo(s) { return s > 0 ? 'pos' : (s < 0 ? 'neg' : 'zero'); }
+  function rotuloSaldo(s) { return (s > 0 ? '+' : '') + s; }
+
+  /* ---------- atualização pontual (sem re-render, preserva foco) ---------- */
+  function atualizarPlacar(opId) {
+    const d = decisaoAtual(); if (!d) return;
+    const op = d.opcoes.find(o => o.id === opId); if (!op) return;
+    const c = computar(op);
+    const elP = document.querySelector(`[data-somapros="${opId}"]`);
+    const elC = document.querySelector(`[data-somacontras="${opId}"]`);
+    const elS = document.querySelector(`[data-saldo="${opId}"]`);
+    if (elP) elP.textContent = c.somaPros;
+    if (elC) elC.textContent = c.somaContras;
+    if (elS) { elS.textContent = rotuloSaldo(c.saldo); elS.className = 'saldo ' + classeSaldo(c.saldo); }
+  }
+
+  /* ---------- render: comparar ---------- */
+  function renderComparar() {
+    const d = decisaoAtual();
+    if (!d || d.opcoes.length === 0) {
+      comparar.innerHTML = '<div class="vazio">Monte uma decisão primeiro, em <strong>Minha decisão</strong>, para ver a comparação aqui.</div>';
+      return;
+    }
+    const linhas = d.opcoes.map((op, i) => ({ op, i, ...computar(op) }));
+    const temConteudo = linhas.some(l => l.somaPros > 0 || l.somaContras > 0);
+    const max = Math.max(1, ...linhas.map(l => Math.max(l.somaPros, l.somaContras)));
+    const ordenado = linhas.slice().sort((a, b) => b.saldo - a.saldo);
+    const lider = ordenado[0];
+
+    let html = '';
+    ordenado.forEach(l => {
+      const ehLider = temConteudo && l === lider && l.saldo > 0;
+      const largContra = (l.somaContras / max) * 100;
+      const largPro = (l.somaPros / max) * 100;
+      html += `
+        <article class="cartao linha-comparar${ehLider ? ' destaque' : ''}">
+          <div class="topo-linha">
+            <span class="nome-opcao">${esc(nomeOpcao(l.op, l.i))}</span>
+            ${ehLider ? '<span class="selo">maior saldo</span>' : ''}
+            <span class="saldo-num ${classeSaldo(l.saldo)}">${rotuloSaldo(l.saldo)}</span>
+          </div>
+          <div class="balanca" role="img" aria-label="Contras ${l.somaContras}, prós ${l.somaPros}, saldo ${l.saldo}">
+            <div class="balanca-lado contra"><div class="balanca-barra contra" style="width:${largContra}%"></div></div>
+            <div class="balanca-lado pro"><div class="balanca-barra pro" style="width:${largPro}%"></div></div>
+          </div>
+          <div class="legenda-balanca"><span>contras ${l.somaContras}</span><span>prós ${l.somaPros}</span></div>
+          <div class="medidor-intuicao">
+            <span>vontade</span>
+            <span class="trilho"><i style="width:${l.op.intuicao * 10}%"></i></span>
+            <span>${l.op.intuicao}/10</span>
+          </div>
+        </article>`;
+    });
+
+    html += renderInsight(linhas, ordenado, temConteudo);
+    html += renderGutcheck(d);
+    comparar.innerHTML = html;
+  }
+
+  function renderInsight(linhas, ordenado, temConteudo) {
+    if (!temConteudo) {
+      return '<div class="aviso aviso--calmo"><p>Ainda não há prós e contras com peso suficiente para comparar. Volte a <strong>Minha decisão</strong> e preencha ao menos alguns fatores em cada opção.</p></div>';
+    }
+    const lider = ordenado[0];
+    const segundo = ordenado[1];
+    let texto = `Pela soma dos pesos, <strong>${esc(nomeOpcao(lider.op, lider.i))}</strong> é a opção mais bem justificada no papel, com saldo de ${rotuloSaldo(lider.saldo)}.`;
+
+    if (segundo && lider.saldo === segundo.saldo) {
+      texto += ` Mas há empate no topo com <strong>${esc(nomeOpcao(segundo.op, segundo.i))}</strong> — a conta, sozinha, não desempata. Vale olhar qual delas você quer mais, e por quê.`;
+    } else if (segundo && (lider.saldo - segundo.saldo) <= 1) {
+      texto += ` A diferença para <strong>${esc(nomeOpcao(segundo.op, segundo.i))}</strong> é pequena: são opções muito próximas, então o desempate provável está no que os números não capturam.`;
+    }
+
+    const maisDesejada = linhas.slice().sort((a, b) => b.op.intuicao - a.op.intuicao)[0];
+    let gap = '';
+    if (maisDesejada && maisDesejada.op !== lider.op && maisDesejada.op.intuicao > 5) {
+      gap = `<div class="aviso"><p><strong>Um desencontro que vale notar:</strong> sua conta aponta para <strong>${esc(nomeOpcao(lider.op, lider.i))}</strong>, mas a opção que uma parte de você mais quer é <strong>${esc(nomeOpcao(maisDesejada.op, maisDesejada.i))}</strong>. Isso costuma significar que existe um valor importante para você que ainda não virou um "pró" com peso na balança — ou um medo que está pesando mais do que você admitiu. Vale investigar, sem pressa.</p></div>`;
+    }
+
+    return `<div class="aviso aviso--calmo"><p>${texto}</p></div>${gap}`;
+  }
+
+  function renderGutcheck(d) {
+    return `
+      <div class="gutcheck">
+        <h2>O teste da intuição</h2>
+        <p style="max-width:60ch">Agora que a balança mostrou um resultado, faça este exercício antes de decidir:</p>
+        <ol>
+          <li>Imagine que a decisão já está tomada, a favor da opção com maior saldo. Ela é definitiva.</li>
+          <li>Repare na sua primeira reação corporal, no primeiro segundo: é <strong>alívio</strong> ou é <strong>aperto</strong>?</li>
+          <li>Essa reação é informação. Alívio confirma o caminho; aperto sugere que algo importante ficou de fora da conta.</li>
+        </ol>
+        <label for="reflexao-decisao" class="nota" style="display:block;margin-bottom:.4rem">Anote o que sentiu e o que percebeu (fica salvo só neste navegador):</label>
+        <textarea id="reflexao-decisao" rows="4" data-campo="reflexao"
+          placeholder="Ex.: o número aponta para ficar no emprego atual, mas senti um aperto — acho que segurança está pesando mais do que eu gostaria...">${esc(d.reflexao)}</textarea>
+        <div class="acoes" style="display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.2rem">
+          <button class="botao" type="button" data-acao="baixar-png">Salvar imagem (.png)</button>
+          <button class="botao botao--calmo" type="button" data-acao="baixar-resumo">Baixar resumo (.txt)</button>
+        </div>
+        <div class="aviso aviso--calmo"><p>O saldo é um guia para pensar, não uma ordem. Se o resultado no papel briga com tudo o que você sente, isso não é erro seu nem da ferramenta — é um sinal de que a decisão merece mais conversa, talvez com alguém de confiança ou com seu psicólogo.</p></div>
+      </div>`;
+  }
+
+  /* ---------- render: histórico ---------- */
+  function renderHistorico() {
+    if (estado.decisoes.length === 0) {
+      historico.innerHTML = '<div class="vazio">Nenhuma decisão salva ainda.</div>';
+      return;
+    }
+    const ordenadas = estado.decisoes.slice().sort((a, b) => (b.criadaEm || '').localeCompare(a.criadaEm || ''));
+    historico.innerHTML = ordenadas.map(dec => {
+      const titulo = (dec.titulo || '').trim() || 'Decisão sem título';
+      const qtd = dec.opcoes.length;
+      const linhas = dec.opcoes.map((op, i) => ({ nome: nomeOpcao(op, i), saldo: computar(op).saldo }));
+      const lider = linhas.slice().sort((a, b) => b.saldo - a.saldo)[0];
+      const temAlgo = dec.opcoes.some(op => op.pros.length || op.contras.length);
+      const meta = `${qtd} opç${qtd === 1 ? 'ão' : 'ões'}` + (temAlgo && lider ? ` · maior saldo: ${esc(lider.nome)} (${rotuloSaldo(lider.saldo)})` : '') + ` · ${dataCurta(dec.criadaEm)}`;
+      const atual = dec.id === estado.atualId ? ' <span class="selo">em foco</span>' : '';
+      return `
+        <article class="cartao item-historico">
+          <div class="info">
+            <strong>${esc(titulo)}${atual}</strong>
+            <div class="meta">${meta}</div>
+          </div>
+          <div class="acoes-item">
+            <button class="btn-mini" type="button" data-acao="abrir-decisao" data-decisao="${dec.id}">Abrir</button>
+            <button class="btn-mini" type="button" data-acao="remover-decisao" data-decisao="${dec.id}">Remover</button>
+          </div>
+        </article>`;
+    }).join('');
+  }
+
+  function dataCurta(iso) {
+    if (!iso) return '';
+    try {
+      return new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
+    } catch (e) { return ''; }
+  }
+
+  /* ---------- resumo em texto ---------- */
+  function baixarResumo() {
+    const d = decisaoAtual(); if (!d) return;
+    const linhas = [];
+    linhas.push('A BALANÇA DA DECISÃO — Ecossistema Psicothica');
+    linhas.push('='.repeat(52));
+    linhas.push('Decisão: ' + ((d.titulo || '').trim() || 'sem título'));
+    linhas.push('Data: ' + dataCurta(d.criadaEm));
+    linhas.push('');
+
+    const ranque = d.opcoes.map((op, i) => ({ op, i, ...computar(op) })).sort((a, b) => b.saldo - a.saldo);
+    ranque.forEach(l => {
+      linhas.push('-'.repeat(52));
+      linhas.push('OPÇÃO: ' + nomeOpcao(l.op, l.i));
+      linhas.push(`Saldo: ${rotuloSaldo(l.saldo)}  (prós ${l.somaPros} / contras ${l.somaContras})  ·  vontade: ${l.op.intuicao}/10`);
+      if (l.op.pros.length) {
+        linhas.push('  Prós:');
+        l.op.pros.forEach(f => linhas.push(`   + ${(f.texto || '(sem descrição)')} [peso ${f.peso}]`));
+      }
+      if (l.op.contras.length) {
+        linhas.push('  Contras:');
+        l.op.contras.forEach(f => linhas.push(`   - ${(f.texto || '(sem descrição)')} [peso ${f.peso}]`));
+      }
+      linhas.push('');
+    });
+
+    if ((d.reflexao || '').trim()) {
+      linhas.push('-'.repeat(52));
+      linhas.push('REFLEXÃO (teste da intuição):');
+      linhas.push(d.reflexao.trim());
+      linhas.push('');
+    }
+
+    linhas.push('='.repeat(52));
+    linhas.push('Ferramenta educativa complementar ao processo terapêutico.');
+    linhas.push('Psicóloga Alanne Raquel Fragoso de Farias — CRP 13/9646.');
+    linhas.push('Não substitui avaliação, diagnóstico ou tratamento profissional.');
+    linhas.push('Contato: @psicothica');
+
+    const blob = new Blob([linhas.join('\n')], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const nome = ((d.titulo || 'decisao').trim() || 'decisao').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40) || 'decisao';
+    a.href = url;
+    a.download = `balanca-${nome}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  /* ---------- exportação PNG (Canvas 2D nativo, sem html2canvas) ---------- */
+  const F = {
+    marca:      '800 20px "Syne", system-ui, sans-serif',
+    titulo:     '800 40px "Syne", system-ui, sans-serif',
+    meta:       '600 16px "Plus Jakarta Sans", system-ui, sans-serif',
+    opNome:     '700 24px "Syne", system-ui, sans-serif',
+    saldo:      '800 22px "Syne", system-ui, sans-serif',
+    secHead:    '700 13px "Plus Jakarta Sans", system-ui, sans-serif',
+    corpo:      '400 16px "Plus Jakarta Sans", system-ui, sans-serif',
+    legenda:    '500 14px "Plus Jakarta Sans", system-ui, sans-serif',
+    rodape:     '400 13px "Plus Jakarta Sans", system-ui, sans-serif',
+    rodapeForte:'700 14px "Plus Jakarta Sans", system-ui, sans-serif'
+  };
+
+  function pgWrap(ctx, texto, maxW) {
+    const palavras = String(texto == null ? '' : texto).split(/\s+/).filter(Boolean);
+    if (!palavras.length) return [''];
+    const linhas = [];
+    let atual = palavras[0];
+    for (let i = 1; i < palavras.length; i++) {
+      const teste = atual + ' ' + palavras[i];
+      if (ctx.measureText(teste).width <= maxW) atual = teste;
+      else { linhas.push(atual); atual = palavras[i]; }
+    }
+    linhas.push(atual);
+    return linhas;
+  }
+  function pgElipsar(ctx, texto, maxW) {
+    let t = String(texto == null ? '' : texto);
+    if (ctx.measureText(t).width <= maxW) return t;
+    while (t.length > 1 && ctx.measureText(t + '…').width > maxW) t = t.slice(0, -1);
+    return t + '…';
+  }
+  function pgRoundRect(ctx, x, y, w, h, r) {
+    r = Math.max(0, Math.min(r, w / 2, h / 2));
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+  function pgCartao(ctx, x, y, w, h, destaque) {
+    pgRoundRect(ctx, x, y, w, h, 18);
+    ctx.fillStyle = 'rgba(255,255,255,0.05)'; ctx.fill();
+    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = destaque ? 'rgba(23,163,152,0.55)' : 'rgba(198,206,223,0.16)';
+    ctx.stroke();
+  }
+  function pgLinha(ctx, x1, y1, x2, y2, cor, lw) {
+    ctx.strokeStyle = cor; ctx.lineWidth = lw || 1;
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  }
+  function pgCirculo(ctx, x, y, r) { ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); }
+  function pgGlow(ctx, x, y, r, cor) {
+    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, cor); g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g; ctx.fillRect(x - r, y - r, r * 2, r * 2);
+  }
+
+  function pgModelo(ctx, d) {
+    const W = 1080, PAD = 56, contentW = W - 2 * PAD, cardPad = 26, innerW = contentW - 2 * cardPad;
+    const m = { W, PAD, contentW, cardPad, innerW, opcoes: [] };
+    let y = 56;
+
+    m.marcaY = y; y += 30 + 16;
+
+    ctx.font = F.titulo;
+    m.tituloLines = pgWrap(ctx, (d.titulo || '').trim() || 'Decisão sem título', contentW);
+    m.tituloY = y; y += m.tituloLines.length * 46 + 6;
+
+    m.metaY = y; y += 26 + 22;
+    m.dividerY = y; y += 24;
+
+    const linhas = d.opcoes.map((op, i) => ({ op, i, ...computar(op) }));
+    m.max = Math.max(1, ...linhas.map(l => Math.max(l.somaPros, l.somaContras)));
+    const ordenado = linhas.slice().sort((a, b) => b.saldo - a.saldo);
+    const lider = ordenado[0];
+    const temConteudo = linhas.some(l => l.somaPros > 0 || l.somaContras > 0);
+
+    ordenado.forEach(l => {
+      ctx.font = F.opNome;
+      const nome = pgElipsar(ctx, nomeOpcao(l.op, l.i), innerW - 110);
+      ctx.font = F.corpo;
+      const fmt = f => '•  ' + (((f.texto || '').trim()) || '(sem descrição)') + '   ·  peso ' + f.peso;
+      const pros = l.op.pros.length ? l.op.pros.map(f => pgWrap(ctx, fmt(f), innerW)) : null;
+      const contras = l.op.contras.length ? l.op.contras.map(f => pgWrap(ctx, fmt(f), innerW)) : null;
+      const prosLn = pros ? pros.reduce((s, a) => s + a.length, 0) : 1;
+      const contrasLn = contras ? contras.reduce((s, a) => s + a.length, 0) : 1;
+      const ih = 224 + (prosLn + contrasLn) * 24;
+      const cardH = ih + cardPad * 2;
+      m.opcoes.push({ l, nome, pros, contras, cardH, startY: y, ehLider: temConteudo && l === lider && l.saldo > 0 });
+      y += cardH + 16;
+    });
+
+    const refl = (d.reflexao || '').trim();
+    if (refl) {
+      ctx.font = F.corpo;
+      const lines = pgWrap(ctx, refl, innerW);
+      const cardH = 80 + lines.length * 24;
+      m.reflexao = { lines, cardH, startY: y };
+      y += cardH + 16;
+    }
+
+    y += 10;
+    m.footerDividerY = y; y += 26;
+    ctx.font = F.rodapeForte;
+    m.footerNome = pgWrap(ctx, 'Ferramenta complementar ao processo terapêutico — Psicóloga Alanne Raquel Fragoso de Farias · CRP 13/9646.', contentW);
+    ctx.font = F.rodape;
+    m.footerAviso = pgWrap(ctx, 'Material educativo e informativo. Não fornece aconselhamento psicológico, diagnóstico ou tratamento, nem substitui a avaliação de um profissional de saúde mental qualificado.', contentW);
+    m.footerContato = 'Contato: @psicothica    ·    Ecossistema Psicothica · A Jornada do Ser';
+    m.footerY = y;
+    y += m.footerNome.length * 22 + 8 + m.footerAviso.length * 20 + 10 + 22 + 48;
+
+    m.totalH = y;
+    return m;
+  }
+
+  function pgDesenharOpcao(ctx, m, o) {
+    const { PAD, contentW, cardPad, innerW } = m;
+    const x = PAD, y = o.startY, w = contentW;
+    pgCartao(ctx, x, y, w, o.cardH, o.ehLider);
+    const cx = x + cardPad;
+    let cy = y + cardPad;
+
+    ctx.textBaseline = 'top';
+    ctx.font = F.opNome; ctx.fillStyle = '#F4F6FB'; ctx.textAlign = 'left';
+    ctx.fillText(o.nome, cx, cy);
+    const s = o.l.saldo;
+    ctx.font = F.saldo;
+    ctx.fillStyle = s > 0 ? '#17A398' : (s < 0 ? '#FF4E86' : '#8D99B4');
+    ctx.textAlign = 'right';
+    ctx.fillText((s > 0 ? '+' : '') + s, x + w - cardPad, cy);
+    ctx.textAlign = 'left';
+    cy += 34 + 16;
+
+    const barX = cx, barW = innerW, barY = cy, barH = 26, mid = barX + barW / 2;
+    pgRoundRect(ctx, barX, barY, barW, barH, 8); ctx.fillStyle = 'rgba(7,14,31,0.55)'; ctx.fill();
+    const wc = (o.l.somaContras / m.max) * (barW / 2);
+    const wp = (o.l.somaPros / m.max) * (barW / 2);
+    if (wc > 0) { pgRoundRect(ctx, mid - wc, barY, wc, barH, 6); ctx.fillStyle = '#D11A5B'; ctx.fill(); }
+    if (wp > 0) { pgRoundRect(ctx, mid, barY, wp, barH, 6); ctx.fillStyle = '#17A398'; ctx.fill(); }
+    pgLinha(ctx, mid, barY - 2, mid, barY + barH + 2, 'rgba(244,246,251,0.35)', 2);
+    cy += barH + 8;
+
+    ctx.font = F.legenda; ctx.fillStyle = '#8D99B4';
+    ctx.fillText('contras ' + o.l.somaContras, barX, cy);
+    ctx.textAlign = 'right'; ctx.fillText('prós ' + o.l.somaPros, barX + barW, cy); ctx.textAlign = 'left';
+    cy += 20 + 12;
+
+    ctx.font = F.corpo; ctx.fillStyle = '#C6CEDF';
+    ctx.fillText('vontade: ' + o.l.op.intuicao + '/10', cx, cy);
+    cy += 22 + 20;
+
+    ctx.font = F.secHead; ctx.fillStyle = '#17A398';
+    ctx.fillText('PRÓS', cx, cy); cy += 20 + 6;
+    ctx.font = F.corpo;
+    if (o.pros) { ctx.fillStyle = '#C6CEDF'; o.pros.forEach(g => g.forEach(ln => { ctx.fillText(ln, cx, cy); cy += 24; })); }
+    else { ctx.fillStyle = '#8D99B4'; ctx.fillText('nenhum registrado', cx, cy); cy += 24; }
+    cy += 14;
+
+    ctx.font = F.secHead; ctx.fillStyle = '#FF4E86';
+    ctx.fillText('CONTRAS', cx, cy); cy += 20 + 6;
+    ctx.font = F.corpo;
+    if (o.contras) { ctx.fillStyle = '#C6CEDF'; o.contras.forEach(g => g.forEach(ln => { ctx.fillText(ln, cx, cy); cy += 24; })); }
+    else { ctx.fillStyle = '#8D99B4'; ctx.fillText('nenhum registrado', cx, cy); cy += 24; }
+  }
+
+  function pgDesenhar(ctx, m, d) {
+    const { W, PAD, contentW, cardPad, totalH } = m;
+
+    const g = ctx.createLinearGradient(0, 0, 0, totalH);
+    g.addColorStop(0, '#0B132B'); g.addColorStop(0.5, '#0A1E2E'); g.addColorStop(1, '#0B2524');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, totalH);
+    pgGlow(ctx, W * 0.1, 20, 640, 'rgba(0,59,54,0.45)');
+    pgGlow(ctx, W * 0.95, 60, 620, 'rgba(92,6,28,0.4)');
+
+    ctx.textBaseline = 'top'; ctx.textAlign = 'left';
+    ctx.fillStyle = '#FF4E86'; pgCirculo(ctx, PAD + 7, m.marcaY + 8, 6);
+    ctx.font = F.marca; ctx.fillStyle = '#F4F6FB';
+    ctx.fillText('A BALANÇA DA DECISÃO', PAD + 22, m.marcaY);
+    const mw = ctx.measureText('A BALANÇA DA DECISÃO').width;
+    ctx.font = F.meta; ctx.fillStyle = '#8D99B4';
+    ctx.fillText('  ·  Psicothica', PAD + 22 + mw, m.marcaY + 4);
+
+    ctx.font = F.titulo; ctx.fillStyle = '#F4F6FB';
+    let ty = m.tituloY; m.tituloLines.forEach(ln => { ctx.fillText(ln, PAD, ty); ty += 46; });
+
+    const nOp = d.opcoes.length;
+    ctx.font = F.meta; ctx.fillStyle = '#8D99B4';
+    ctx.fillText(dataCurta(d.criadaEm) + '  ·  ' + nOp + ' opç' + (nOp === 1 ? 'ão' : 'ões'), PAD, m.metaY);
+
+    pgLinha(ctx, PAD, m.dividerY, W - PAD, m.dividerY, 'rgba(198,206,223,0.16)');
+
+    m.opcoes.forEach(o => pgDesenharOpcao(ctx, m, o));
+
+    if (m.reflexao) {
+      const x = PAD, y = m.reflexao.startY;
+      pgCartao(ctx, x, y, contentW, m.reflexao.cardH, false);
+      const cx = x + cardPad; let cy = y + cardPad;
+      ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+      ctx.font = F.secHead; ctx.fillStyle = '#FF4E86';
+      ctx.fillText('REFLEXÃO · TESTE DA INTUIÇÃO', cx, cy); cy += 20 + 8;
+      ctx.font = F.corpo; ctx.fillStyle = '#C6CEDF';
+      m.reflexao.lines.forEach(ln => { ctx.fillText(ln, cx, cy); cy += 24; });
+    }
+
+    pgLinha(ctx, PAD, m.footerDividerY, W - PAD, m.footerDividerY, 'rgba(198,206,223,0.16)');
+    let fy = m.footerY;
+    ctx.font = F.rodapeForte; ctx.fillStyle = '#C6CEDF';
+    m.footerNome.forEach(ln => { ctx.fillText(ln, PAD, fy); fy += 22; });
+    fy += 8;
+    ctx.font = F.rodape; ctx.fillStyle = '#8D99B4';
+    m.footerAviso.forEach(ln => { ctx.fillText(ln, PAD, fy); fy += 20; });
+    fy += 10;
+    ctx.fillStyle = '#FF4E86';
+    ctx.fillText(m.footerContato, PAD, fy);
+  }
+
+  async function baixarPng(botao) {
+    const d = decisaoAtual(); if (!d) return;
+    const rotulo = botao ? botao.textContent : null;
+    if (botao) { botao.disabled = true; botao.textContent = 'Gerando imagem…'; }
+    try {
+      try {
+        await Promise.all([
+          document.fonts.load('800 40px "Syne"'),
+          document.fonts.load('700 24px "Syne"'),
+          document.fonts.load('400 16px "Plus Jakarta Sans"'),
+          document.fonts.load('600 16px "Plus Jakarta Sans"')
+        ]);
+        await document.fonts.ready;
+      } catch (e) { /* segue com fontes de sistema */ }
+
+      const escala = 2;
+      const ctxMedida = document.createElement('canvas').getContext('2d');
+      const m = pgModelo(ctxMedida, d);
+
+      const cv = document.createElement('canvas');
+      cv.width = m.W * escala;
+      cv.height = m.totalH * escala;
+      const ctx = cv.getContext('2d');
+      ctx.scale(escala, escala);
+      pgDesenhar(ctx, m, d);
+
+      const nome = ((d.titulo || 'decisao').trim() || 'decisao').toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40) || 'decisao';
+      const baixar = (href, revogar) => {
+        const a = document.createElement('a');
+        a.href = href; a.download = 'balanca-' + nome + '.png'; a.click();
+        if (revogar) setTimeout(() => URL.revokeObjectURL(href), 4000);
+      };
+      if (cv.toBlob) {
+        cv.toBlob(b => {
+          if (b) baixar(URL.createObjectURL(b), true);
+          else baixar(cv.toDataURL('image/png'), false);
+        }, 'image/png');
+      } else {
+        baixar(cv.toDataURL('image/png'), false);
+      }
+    } catch (err) {
+      try { window.alert('Não foi possível gerar a imagem: ' + err.message); } catch (e) {}
+    } finally {
+      if (botao) { botao.disabled = false; botao.textContent = rotulo; }
+    }
+  }
+
+  /* ---------- render geral ---------- */
+  function renderTudo() {
+    renderWorkspace();
+    renderComparar();
+    renderHistorico();
+  }
+
+  /* ---------- navegação por abas (delegador em fase de captura) ---------- */
+  function irPara(idPainel) {
+    document.querySelectorAll('.painel').forEach(p => p.classList.toggle('ativo', p.id === idPainel));
+    document.querySelectorAll('.aba').forEach(b => {
+      const sel = b.getAttribute('data-ir') === idPainel;
+      b.setAttribute('aria-selected', sel ? 'true' : 'false');
+      b.tabIndex = sel ? 0 : -1;
+    });
+    if (idPainel === 'painel-comparar') renderComparar();
+    if (idPainel === 'painel-historico') renderHistorico();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  document.addEventListener('click', e => {
+    const alvo = e.target.closest('[data-ir]');
+    if (!alvo) return;
+    const destino = alvo.getAttribute('data-ir');
+    if (!destino) return;
+    e.preventDefault();
+    irPara(destino);
+  }, true);
+
+  /* teclado nas abas */
+  const tablist = $('.abas');
+  tablist.addEventListener('keydown', e => {
+    const abas = Array.from(tablist.querySelectorAll('.aba'));
+    const i = abas.indexOf(document.activeElement);
+    if (i < 0) return;
+    let j = i;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') j = (i + 1) % abas.length;
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') j = (i - 1 + abas.length) % abas.length;
+    else if (e.key === 'Home') j = 0;
+    else if (e.key === 'End') j = abas.length - 1;
+    else return;
+    e.preventDefault();
+    abas[j].focus();
+    abas[j].click();
+  });
+
+  /* ---------- edição (input/change delegados) ---------- */
+  document.addEventListener('input', e => {
+    const campo = e.target.dataset ? e.target.dataset.campo : null;
+    if (!campo) return;
+    const d = decisaoAtual(); if (!d) return;
+
+    if (campo === 'titulo-decisao') {
+      d.titulo = e.target.value; salvar();
+      const sel = $('#seletor-decisao');
+      if (sel) { const opt = sel.querySelector(`option[value="${d.id}"]`); if (opt) opt.textContent = (d.titulo || '').trim() || 'Decisão sem título'; }
+      return;
+    }
+    if (campo === 'reflexao') { d.reflexao = e.target.value; salvar(); return; }
+
+    const opEl = e.target.closest('[data-op]');
+    if (!opEl) return;
+    const op = d.opcoes.find(o => o.id === opEl.dataset.op); if (!op) return;
+
+    if (campo === 'nome-opcao') { op.nome = e.target.value; salvar(); return; }
+    if (campo === 'intuicao') {
+      op.intuicao = Number(e.target.value); salvar();
+      const lab = document.querySelector(`[data-intuicao-label="${op.id}"]`);
+      if (lab) lab.textContent = op.intuicao;
+      return;
+    }
+
+    const fatEl = e.target.closest('[data-fator]');
+    if (!fatEl) return;
+    const arr = fatEl.dataset.tipo === 'pro' ? op.pros : op.contras;
+    const f = arr.find(x => x.id === fatEl.dataset.fator); if (!f) return;
+
+    if (campo === 'texto-fator') { f.texto = e.target.value; salvar(); return; }
+    if (campo === 'peso-fator') {
+      f.peso = Number(e.target.value); salvar();
+      const lab = fatEl.querySelector('[data-peso-label]');
+      if (lab) lab.textContent = f.peso;
+      atualizarPlacar(op.id);
+      return;
+    }
+  });
+
+  document.addEventListener('change', e => {
+    if (e.target.dataset && e.target.dataset.campo === 'selecionar-decisao') {
+      estado.atualId = e.target.value; salvar(); renderTudo();
+    }
+  });
+
+  /* ---------- ações (click delegado) ---------- */
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('[data-acao]');
+    if (!btn) return;
+    const acao = btn.dataset.acao;
+
+    if (acao === 'nova-decisao') {
+      const d = novaDecisao(); estado.decisoes.push(d); estado.atualId = d.id;
+      salvar(); renderTudo(); irPara('painel-decidir'); return;
+    }
+    if (acao === 'abrir-decisao') {
+      estado.atualId = btn.dataset.decisao; salvar(); renderTudo(); irPara('painel-decidir'); return;
+    }
+    if (acao === 'remover-decisao') {
+      const id = btn.dataset.decisao;
+      const alvo = estado.decisoes.find(x => x.id === id);
+      const rot = alvo ? ((alvo.titulo || '').trim() || 'esta decisão sem título') : 'esta decisão';
+      let ok = true;
+      try { ok = window.confirm('Remover "' + rot + '"? Isso não pode ser desfeito.'); } catch (err) { ok = true; }
+      if (!ok) return;
+      estado.decisoes = estado.decisoes.filter(x => x.id !== id);
+      if (estado.atualId === id) estado.atualId = (estado.decisoes[0] && estado.decisoes[0].id) || null;
+      salvar(); renderTudo(); return;
+    }
+    if (acao === 'exportar') { dados.exportar('psicothica-decisoes.json'); return; }
+    if (acao === 'importar') { campoArquivo.click(); return; }
+    if (acao === 'baixar-resumo') { baixarResumo(); return; }
+    if (acao === 'baixar-png') { baixarPng(btn); return; }
+
+    const d = decisaoAtual();
+    if (!d) return;
+    const opEl = btn.closest('[data-op]');
+    const op = opEl ? d.opcoes.find(o => o.id === opEl.dataset.op) : null;
+
+    if (acao === 'add-opcao') { d.opcoes.push(novaOpcao()); salvar(); renderWorkspace(); return; }
+    if (acao === 'remover-opcao') {
+      if (op && d.opcoes.length > 1) { d.opcoes = d.opcoes.filter(o => o !== op); salvar(); renderWorkspace(); }
+      return;
+    }
+    if (acao === 'add-pro') { if (op) { op.pros.push(novoFator()); salvar(); renderWorkspace(); } return; }
+    if (acao === 'add-contra') { if (op) { op.contras.push(novoFator()); salvar(); renderWorkspace(); } return; }
+    if (acao === 'remover-fator') {
+      const fatEl = btn.closest('[data-fator]');
+      if (op && fatEl) {
+        const arr = fatEl.dataset.tipo === 'pro' ? op.pros : op.contras;
+        const idx = arr.findIndex(x => x.id === fatEl.dataset.fator);
+        if (idx >= 0) { arr.splice(idx, 1); salvar(); renderWorkspace(); }
+      }
+      return;
+    }
+  });
+
+  /* ---------- importação de backup ---------- */
+  campoArquivo.addEventListener('change', async e => {
+    const arquivo = e.target.files[0];
+    if (!arquivo) return;
+    try {
+      await dados.importar(arquivo);
+      estado.decisoes = dados.ler(CHAVE_LISTA, []);
+      estado.atualId = dados.ler(CHAVE_ATUAL, null);
+      if (!decisaoAtual()) estado.atualId = (estado.decisoes[0] && estado.decisoes[0].id) || null;
+      salvar(); renderTudo();
+      try { window.alert('Backup restaurado.'); } catch (err) {}
+    } catch (erro) {
+      try { window.alert(erro.message); } catch (err) {}
+    }
+    e.target.value = '';
+  });
+
+  /* ---------- aviso de armazenamento bloqueado ---------- */
+  if (!dados.persistente) {
+    const slot = $('#aviso-armazenamento-slot');
+    if (slot) {
+      slot.innerHTML = '<div class="aviso aviso-armazenamento"><p><strong>Este navegador está bloqueando o armazenamento local.</strong> Você pode usar a ferramenta normalmente, mas as decisões duram só enquanto esta aba estiver aberta. Exporte o backup antes de fechar, ou abra o app em uma janela normal do navegador.</p></div>';
+    }
+  }
+
+  /* ---------- inicialização ---------- */
+  estado.decisoes = dados.ler(CHAVE_LISTA, []);
+  estado.atualId = dados.ler(CHAVE_ATUAL, null);
+  if (!Array.isArray(estado.decisoes)) estado.decisoes = [];
+  if (estado.decisoes.length === 0) {
+    const d = novaDecisao(); estado.decisoes.push(d); estado.atualId = d.id; salvar();
+  } else if (!decisaoAtual()) {
+    estado.atualId = estado.decisoes[0].id; salvar();
+  }
+  renderTudo();
+})();
+</script>
+</body>
+</html>
