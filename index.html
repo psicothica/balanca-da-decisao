@@ -1,63 +1,59 @@
 <!DOCTYPE html>
+<!-- psicothica-kit 1.0.1 -->
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>A Balança da Decisão — Psicothica</title>
 <meta name="description" content="Organize decisões difíceis: liste opções, pese prós e contras e enxergue para onde a balança se inclina — sem que o número decida por você.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="psi-kit/logo/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="psi-kit/logo/apple-touch-icon.png">
+<link rel="stylesheet" href="psi-kit/tokens.css">
+<link rel="stylesheet" href="psi-kit/psi-components.css">
 <style>
 /* ============================================================
    ECOSSISTEMA PSICOTHICA — Design System
    Tokens globais: cor, tipografia, espaço, movimento
    ============================================================ */
 
+/* Paleta, fontes e vidro vêm do psicothica-kit 1.0.1 (psi-kit/tokens.css).
+   Os nomes antigos do app continuam existindo, mas agora apontam para os tokens do kit. */
 :root {
-  /* --- Profundidade (fundos e grandes áreas) --- */
-  --azul-marinho: #0B132B;
-  --azul-marinho-900: #070E1F;
-  --azul-marinho-700: #131F45;
-  --verde-petroleo: #0B2524;
-  --verde-petroleo-600: #003B36;
-  --verde-petroleo-400: #0A4B44;
+  /* --- Fundo e texto --- */
+  --azul-marinho: var(--psi-base);
+  --azul-marinho-900: var(--psi-base);
+  --branco: var(--psi-text);
+  --cinza-claro: var(--psi-text-muted);
+  --cinza-medio: var(--psi-text-muted);   /* só tons aprovados para texto pequeno (docs/contraste do kit) */
+  --cinza-linha: var(--psi-glass-border);
 
-  /* --- Força e coragem (ação, foco, impacto) --- */
-  --bordo: #5C061C;
-  --bordo-escuro: #4A0E17;
-  --magenta: #D11A5B;
-  --magenta-alt: #C11296;
-  --magenta-claro: #FF4E86;
+  /* --- Destaque: orquídea/lavanda (contras, links) e ciano (prós) --- */
+  --magenta: var(--psi-orchid);
+  --magenta-alt: var(--psi-violet);
+  --magenta-claro: var(--psi-lavender);
+  --bordo: var(--psi-violet);
+  --verde-petroleo-600: var(--psi-indigo);
+  --teal: var(--psi-cyan);
+  --teal-fundo: #01366d;                  /* início do gradiente 5 do kit */
 
-  /* --- Neutros --- */
-  --branco: #F4F6FB;
-  --cinza-claro: #C6CEDF;
-  --cinza-medio: #8D99B4;
-  --cinza-linha: rgba(198, 206, 223, 0.14);
+  /* --- Superfícies (vidro) --- */
+  --superficie: var(--psi-glass-bg);
+  --superficie-forte: var(--psi-glass-bg-strong);
+  --vidro: blur(var(--psi-glass-blur)) saturate(130%);
 
-  /* --- Superfícies --- */
-  --superficie: rgba(255, 255, 255, 0.045);
-  --superficie-forte: rgba(255, 255, 255, 0.075);
-  --vidro: blur(14px) saturate(130%);
-
-  /* --- Verde calmo (equilíbrio, prós) --- */
-  --teal: #17A398;
-  --teal-fundo: #0F5E6E;
-
-  /* --- Gradientes assinatura --- */
-  --grad-profundidade: linear-gradient(145deg, #0B132B 0%, #0A1E2E 45%, #0B2524 100%);
-  --grad-sinapse: linear-gradient(120deg, var(--bordo) 0%, var(--magenta) 55%, var(--magenta-alt) 100%);
-  --grad-calma: linear-gradient(120deg, var(--verde-petroleo-600) 0%, #0F5E6E 100%);
+  /* --- Gradientes do kit --- */
+  --grad-profundidade: var(--psi-grad-6);
+  --grad-sinapse: var(--psi-grad-4);
+  --grad-calma: var(--psi-grad-5);
 
   /* --- Tipografia --- */
-  --fonte-display: 'Syne', 'Montserrat', system-ui, sans-serif;
-  --fonte-texto: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  --fonte-display: var(--psi-font-display);
+  --fonte-texto: var(--psi-font-text);
 
-  --t-hero: clamp(2.4rem, 6vw, 4.4rem);
-  --t-h1: clamp(2rem, 4.5vw, 3.2rem);
-  --t-h2: clamp(1.45rem, 3vw, 2.1rem);
-  --t-h3: 1.15rem;
+  --t-hero: clamp(2rem, 6vw, 3.6rem);
+  --t-h1: clamp(1.7rem, 4.2vw, 2.6rem);
+  --t-h2: clamp(1.3rem, 2.8vw, 1.8rem);
+  --t-h3: 1.05rem;
   --t-corpo: 1.02rem;
   --t-nota: 0.86rem;
   --t-eyebrow: 0.74rem;
@@ -73,7 +69,7 @@
   --transicao: 340ms cubic-bezier(.22, 1, .36, 1);
   --transicao-rapida: 180ms ease-out;
   --sombra-profunda: 0 26px 70px rgba(3, 8, 20, 0.55);
-  --brilho-magenta: 0 0 32px rgba(209, 26, 91, 0.38);
+  --brilho-magenta: var(--psi-neon);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -108,9 +104,9 @@ body {
   inset: 0;
   z-index: -1;
   background:
-    radial-gradient(1100px 700px at 12% -10%, rgba(0, 59, 54, .55), transparent 60%),
-    radial-gradient(900px 620px at 92% 8%, rgba(92, 6, 28, .48), transparent 62%),
-    radial-gradient(760px 620px at 50% 110%, rgba(193, 18, 150, .18), transparent 65%),
+    radial-gradient(1100px 700px at 12% -10%, rgba(19, 1, 105, .55), transparent 60%),
+    radial-gradient(900px 620px at 92% 8%, rgba(177, 4, 220, .28), transparent 62%),
+    radial-gradient(760px 620px at 50% 110%, rgba(2, 187, 255, .14), transparent 65%),
     var(--grad-profundidade);
 }
 
@@ -120,9 +116,9 @@ body {
 
 h1, h2, h3, h4 {
   font-family: var(--fonte-display);
-  font-weight: 700;
-  line-height: 1.08;
-  letter-spacing: -0.02em;
+  font-weight: 900;
+  line-height: 1.12;
+  letter-spacing: 0;
   margin: 0 0 0.6em;
 }
 h1 { font-size: var(--t-h1); }
@@ -159,7 +155,7 @@ a { color: var(--magenta-claro); text-decoration-thickness: 1px; text-underline-
   -webkit-backdrop-filter: var(--vidro);
   transition: transform var(--transicao), border-color var(--transicao), background var(--transicao);
 }
-.cartao:hover { border-color: rgba(209, 26, 91, .38); background: var(--superficie-forte); }
+.cartao:hover { border-color: rgba(206, 87, 223, .38); background: var(--superficie-forte); }
 
 .botao {
   display: inline-flex;
@@ -174,15 +170,15 @@ a { color: var(--magenta-claro); text-decoration-thickness: 1px; text-underline-
   border-radius: 100px;
   border: 1px solid transparent;
   background: var(--grad-sinapse);
-  color: #fff;
+  color: var(--psi-ink);
   cursor: pointer;
   transition: transform var(--transicao-rapida), box-shadow var(--transicao), filter var(--transicao-rapida);
 }
-.botao:hover { transform: translateY(-2px); box-shadow: var(--brilho-magenta); }
+.botao:hover { transform: translateY(-2px); box-shadow: var(--psi-neon); }
 .botao:active { transform: translateY(0); }
-.botao--fantasma { background: transparent; border-color: rgba(198, 206, 223, .28); color: var(--branco); }
+.botao--fantasma { background: transparent; border-color: rgba(225, 238, 252, .28); color: var(--branco); }
 .botao--fantasma:hover { border-color: var(--magenta); box-shadow: none; }
-.botao--calmo { background: var(--grad-calma); }
+.botao--calmo { background: var(--grad-calma); color: #fff; }
 
 :where(a, button, input, textarea, select, [tabindex]):focus-visible {
   outline: 2px solid var(--magenta-claro);
@@ -194,7 +190,7 @@ input, textarea, select {
   font-family: var(--fonte-texto);
   font-size: .95rem;
   color: var(--branco);
-  background: rgba(7, 14, 31, .6);
+  background: rgba(15, 20, 42, .6);
   border: 1px solid var(--cinza-linha);
   border-radius: var(--raio-p);
   padding: .75rem .9rem;
@@ -205,15 +201,6 @@ input:focus, textarea:focus, select:focus { border-color: var(--magenta); }
 ::placeholder { color: rgba(141, 153, 180, .75); }
 textarea { resize: vertical; }
 
-.rodape {
-  border-top: 1px solid var(--cinza-linha);
-  padding: 2.4rem 0 3rem;
-  margin-top: var(--secao);
-  font-size: var(--t-nota);
-  color: var(--cinza-medio);
-  text-align: center;
-}
-.rodape a { font-weight: 600; }
 
 .oculto { display: none !important; }
 .sr-only {
@@ -223,7 +210,7 @@ textarea { resize: vertical; }
 
 .aviso {
   border-left: 3px solid var(--magenta);
-  background: rgba(92,6,28,.28);
+  background: rgba(177,4,220,.16);
   border-radius: var(--raio-p);
   padding: 1rem 1.2rem;
   font-size: .92rem;
@@ -231,7 +218,7 @@ textarea { resize: vertical; }
   margin-top: 1.6rem;
 }
 .aviso p:last-child { margin-bottom: 0; }
-.aviso--calmo { border-left-color: var(--teal); background: rgba(15,94,110,.24); }
+.aviso--calmo { border-left-color: var(--teal); background: rgba(2,187,255,.12); }
 
 /* ============================================================
    A BALANÇA DA DECISÃO — estilos específicos
@@ -240,21 +227,17 @@ textarea { resize: vertical; }
 /* --- Cabeçalho + abas --- */
 .topo-app {
   position: sticky; top: 0; z-index: 20;
-  background: rgba(7, 14, 31, .72);
+  background: rgba(15, 20, 42, .72);
   backdrop-filter: var(--vidro);
   -webkit-backdrop-filter: var(--vidro);
   border-bottom: 1px solid var(--cinza-linha);
 }
-.topo-app > .envelope { padding: .8rem 0; }
-.marca {
-  display: flex; align-items: center; gap: .6rem;
-  font-family: var(--fonte-display); font-weight: 800; font-size: .95rem; letter-spacing: .02em;
-}
-.marca .nodo { width: 10px; height: 10px; border-radius: 50%; background: var(--grad-sinapse); box-shadow: 0 0 12px rgba(209,26,91,.7); flex: none; }
-.marca span { color: var(--cinza-medio); font-weight: 600; font-size: .8rem; }
+.topo-app > .envelope { padding: .5rem 0; }
+.rodape-contato { text-align: center; margin: var(--secao) 0 0; font-size: var(--t-nota); }
+.rodape-contato + .psi-footer { margin-top: 1rem; }
 
 .abas {
-  display: flex; gap: .3rem; margin-top: .7rem; flex-wrap: nowrap;
+  display: flex; gap: .3rem; flex-wrap: nowrap;
   overflow-x: auto; -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
@@ -268,7 +251,7 @@ textarea { resize: vertical; }
   transition: background var(--transicao-rapida), color var(--transicao-rapida), border-color var(--transicao-rapida);
 }
 .aba:hover { background: var(--superficie-forte); color: #fff; }
-.aba[aria-selected="true"] { background: var(--grad-sinapse); color: #fff; }
+.aba[aria-selected="true"] { background: var(--grad-sinapse); color: var(--psi-ink); }
 
 /* --- Painéis --- */
 .painel { display: none; padding-block: var(--secao); }
@@ -331,7 +314,7 @@ textarea { resize: vertical; }
   padding: .55rem .6rem;
   border: 1px solid var(--cinza-linha);
   border-radius: var(--raio-p);
-  background: rgba(7,14,31,.4);
+  background: rgba(15,20,42,.45);
   margin-bottom: .55rem;
 }
 .fator-texto { font-size: .9rem; padding: .5rem .65rem; }
@@ -373,24 +356,24 @@ input[type="range"] { accent-color: var(--magenta); }
 
 /* --- Comparar --- */
 .linha-comparar { padding: 1.15rem 1.25rem; margin-bottom: .9rem; }
-.linha-comparar.destaque { border-color: rgba(23,163,152,.5); box-shadow: 0 0 0 1px rgba(23,163,152,.25), 0 18px 40px rgba(3,8,20,.4); }
+.linha-comparar.destaque { border-color: rgba(2,187,255,.5); box-shadow: 0 0 0 1px rgba(2,187,255,.25), 0 18px 40px rgba(3,8,20,.4); }
 .linha-comparar .topo-linha { display: flex; align-items: baseline; gap: .7rem; margin-bottom: .7rem; flex-wrap: wrap; }
 .linha-comparar .nome-opcao { font-family: var(--fonte-display); font-weight: 700; font-size: 1.05rem; }
 .selo {
   font-size: .64rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
-  padding: .2rem .55rem; border-radius: 100px; background: rgba(23,163,152,.18); color: var(--teal);
+  padding: .2rem .55rem; border-radius: 100px; background: rgba(2,187,255,.16); color: var(--teal);
 }
 .linha-comparar .saldo-num { font-family: var(--fonte-display); font-weight: 800; font-size: 1.3rem; margin-left: auto; }
 
 .balanca {
   display: flex; align-items: stretch; height: 26px;
-  border-radius: 8px; overflow: hidden; background: rgba(7,14,31,.5);
+  border-radius: 8px; overflow: hidden; background: rgba(15,20,42,.55);
   border: 1px solid var(--cinza-linha);
 }
 .balanca-lado { flex: 1; display: flex; height: 100%; }
 .balanca-lado.contra { justify-content: flex-end; border-right: 2px solid rgba(244,246,251,.28); }
 .balanca-barra { height: 100%; transition: width var(--transicao); }
-.balanca-barra.contra { background: linear-gradient(90deg, rgba(209,26,91,.2), var(--magenta)); border-radius: 6px 0 0 6px; }
+.balanca-barra.contra { background: linear-gradient(90deg, rgba(206,87,223,.25), var(--magenta)); border-radius: 6px 0 0 6px; }
 .balanca-barra.pro { background: linear-gradient(90deg, var(--teal-fundo), var(--teal)); border-radius: 0 6px 6px 0; }
 .legenda-balanca { display: flex; justify-content: space-between; font-size: .72rem; color: var(--cinza-medio); margin-top: .45rem; }
 
@@ -431,18 +414,34 @@ input[type="range"] { accent-color: var(--magenta); }
 }
 </style>
 </head>
-<body id="topo">
+<body id="topo" class="psi-theme">
 <div class="fundo-profundo"></div>
 <canvas id="neural" data-densidade="0.8" aria-hidden="true"></canvas>
 
 <div class="conteudo">
+<!-- psicothica-kit 1.0.1 · cabeçalho (completo fora do iframe, compacto dentro) -->
+<script>
+  (function () {
+    try { if (window.self !== window.top) document.documentElement.classList.add("psi-embedded"); }
+    catch (e) { document.documentElement.classList.add("psi-embedded"); }
+  })();
+</script>
+<header class="psi-header" role="banner">
+  <div class="psi-header__inner">
+    <picture class="psi-header__logo psi-header__logo--full">
+      <source type="image/webp" srcset="psi-kit/logo/logo-128.webp 1x, psi-kit/logo/logo-256.webp 2x">
+      <img src="psi-kit/logo/logo-128.png" srcset="psi-kit/logo/logo-128.png 1x, psi-kit/logo/logo-256.png 2x" width="44" height="44" alt="" decoding="async" loading="lazy">
+    </picture>
+    <picture class="psi-header__logo psi-header__logo--crop">
+      <source type="image/webp" srcset="psi-kit/logo/logo-32.webp 1x, psi-kit/logo/logo-64.webp 2x">
+      <img src="psi-kit/logo/logo-32.png" srcset="psi-kit/logo/logo-32.png 1x, psi-kit/logo/logo-64.png 2x" width="28" height="28" alt="" decoding="async" loading="lazy">
+    </picture>
+    <p class="psi-header__app">Balança da Decisão</p>
+    <span class="psi-seal">Psicothica</span>
+  </div>
+</header>
   <header class="topo-app">
     <div class="envelope">
-      <div class="marca">
-        <span class="nodo" aria-hidden="true"></span>
-        A Balança da Decisão
-        <span>· Psicothica</span>
-      </div>
       <div class="abas" role="tablist" aria-label="Seções da ferramenta">
         <button class="aba" role="tab" type="button" data-ir="painel-entender" aria-selected="true" aria-controls="painel-entender">Entender</button>
         <button class="aba" role="tab" type="button" data-ir="painel-decidir" aria-selected="false" aria-controls="painel-decidir" tabindex="-1">Minha decisão</button>
@@ -492,7 +491,6 @@ input[type="range"] { accent-color: var(--magenta); }
     <!-- MINHA DECISÃO -->
     <section class="painel" id="painel-decidir" role="tabpanel" aria-labelledby="aba-decidir" tabindex="0">
       <p class="eyebrow">Minha decisão</p>
-      <div id="aviso-armazenamento-slot"></div>
       <div id="workspace"></div>
     </section>
 
@@ -519,14 +517,49 @@ input[type="range"] { accent-color: var(--magenta); }
     </section>
   </main>
 
-  <footer class="envelope rodape">
-    <p style="font-family:var(--fonte-texto)">Este recurso foi desenvolvido como ferramenta complementar ao processo terapêutico pela psicóloga <strong>Alanne Raquel Fragoso de Farias — CRP 13/9646</strong>.</p>
-    <p class="nota" style="max-width:62ch;margin:0 auto 1.1rem">Aviso Legal: este aplicativo é uma ferramenta educacional e informativa. Ele não fornece aconselhamento psicológico, diagnóstico ou tratamento, nem substitui a avaliação e o acompanhamento de um profissional de saúde mental qualificado. Ao perceber sintomas que afetam negativamente áreas importantes da sua vida, procure ajuda profissional.</p>
-    <p>Entre em contato para quaisquer dúvidas ou orientações: <a href="https://instagram.com/psicothica" target="_blank" rel="noopener">@psicothica</a></p>
-    <p class="nota" style="margin-top:1.2rem">Ecossistema Psicothica · A Jornada do Ser · comunidade AyA</p>
-  </footer>
+  <p class="rodape-contato">Entre em contato para quaisquer dúvidas ou orientações: <a href="https://instagram.com/psicothica" target="_blank" rel="noopener noreferrer">@psicothica</a></p>
+<!-- psicothica-kit 1.0.1 · rodapé -->
+<footer class="psi-footer" role="contentinfo" data-psi-app="Balança da Decisão" data-psi-versao="1.0.0" data-psi-revisao="out/2026">
+  <div class="psi-footer__inner">
+    <p class="psi-footer__app" data-psi-slot="app"></p>
+    <p class="psi-footer__assinatura">
+      <span><strong>Psicothica</strong> · idealizado e revisado por Alanne Raquel Fragoso de Farias, psicóloga (CRP 13/9646)</span>
+      <span class="psi-footer__colab" data-psi-slot="colab" hidden></span>
+      <span>Disponível no Programa Ramificar da AyA Clínica Integrada.</span>
+    </p>
+    <p>Material informativo e de apoio. Não substitui avaliação, diagnóstico ou acompanhamento profissional, e não oferece promessa de cura ou de resultado.</p>
+    <p class="psi-footer__medico" data-psi-slot="aviso-medico" hidden>As informações sobre diagnóstico e tratamento médico têm caráter apenas informativo e se baseiam em literatura científica publicada. Decisões sobre medicação ou tratamento devem ser tomadas com seu(sua) médico(a).</p>
+    <p>Conteúdo e interface elaborados com auxílio de ferramentas de inteligência artificial e revisados pelos profissionais responsáveis acima.</p>
+    <p>Seus dados ficam só neste aparelho. Nada do que você escreve é enviado à AyA nem a terceiros. Se você exportar um arquivo, ele levará o que você escreveu: guarde-o com cuidado.</p>
+    <p class="psi-footer__crise">Em sofrimento intenso ou risco? <a href="tel:188" target="_blank" rel="noopener noreferrer">CVV 188</a> (gratuito, 24h) · <a href="tel:192" target="_blank" rel="noopener noreferrer">SAMU 192</a> · ou a emergência mais próxima.</p>
+    <p class="psi-footer__versao">Versão <span data-psi-slot="versao">—</span> · revisado em <span data-psi-slot="revisao">—</span></p>
+  </div>
+</footer>
+<script>
+  (function () {
+    var f = document.currentScript && document.currentScript.previousElementSibling;
+    if (!f || !f.classList.contains("psi-footer")) return;
+    function put(slot, text) { var el = f.querySelector('[data-psi-slot="' + slot + '"]'); if (el) el.textContent = text || ""; }
+    put("app", f.getAttribute("data-psi-app"));
+    put("versao", f.getAttribute("data-psi-versao"));
+    put("revisao", f.getAttribute("data-psi-revisao"));
+    var med = f.querySelector('[data-psi-slot="aviso-medico"]');
+    if (med && f.hasAttribute("data-psi-aviso-medico")) med.hidden = false;
+    var colab = f.querySelector('[data-psi-slot="colab"]');
+    var raw = f.getAttribute("data-psi-colaboradores");
+    if (colab && raw) {
+      try {
+        var itens = JSON.parse(raw).filter(function (c) { return c && c.nome && c.profissao; }).map(function (c) {
+          return c.nome + ", " + c.profissao + (c.registro ? " (" + c.registro + ")" : "");
+        });
+        if (itens.length) { colab.textContent = "Com a colaboração de " + itens.join("; ") + "."; colab.hidden = false; }
+      } catch (e) { /* JSON inválido: a linha simplesmente não aparece */ }
+    }
+  })();
+</script>
 </div>
 
+<script src="psi-kit/js/psi-storage.js"></script>
 <script>
 /* ============================================================
    PSICOTHICA — Malha neural viva
@@ -537,7 +570,7 @@ input[type="range"] { accent-color: var(--magenta); }
   const ctx = canvas.getContext('2d');
   const semMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const densidade = parseFloat(canvas.dataset.densidade || '1');
-  const TOM = { magenta: [209, 26, 91], petroleo: [15, 120, 128], bordo: [140, 20, 55] };
+  const TOM = { magenta: [206, 87, 223], petroleo: [2, 187, 255], bordo: [177, 4, 220] };  // orquídea, ciano e magenta-violeta do kit
   let largura, altura, nos = [], pulsos = [], raf;
   const ponteiro = { x: -9999, y: -9999, ativo: false };
 
@@ -602,8 +635,8 @@ input[type="range"] { accent-color: var(--magenta); }
       const x = p.a.x + (p.b.x - p.a.x) * p.t;
       const y = p.a.y + (p.b.y - p.a.y) * p.t;
       const halo = ctx.createRadialGradient(x, y, 0, x, y, 9);
-      halo.addColorStop(0, 'rgba(255,78,134,.85)');
-      halo.addColorStop(1, 'rgba(255,78,134,0)');
+      halo.addColorStop(0, 'rgba(130,229,255,.85)');
+      halo.addColorStop(1, 'rgba(130,229,255,0)');
       ctx.fillStyle = halo;
       ctx.beginPath();
       ctx.arc(x, y, 9, 0, Math.PI * 2);
@@ -626,89 +659,45 @@ input[type="range"] { accent-color: var(--magenta); }
 })();
 
 /* ============================================================
-   PSICOTHICA — Armazenamento local (com fallback em memória)
-   ============================================================ */
-window.Psicothica = window.Psicothica || {};
-window.Psicothica.dados = (function () {
-  const PREFIXO = 'psicothica:';
-  const memoria = new Map();
-  const persistente = (function () {
-    try {
-      const teste = PREFIXO + 'teste';
-      localStorage.setItem(teste, '1');
-      localStorage.removeItem(teste);
-      return true;
-    } catch (e) { return false; }
-  })();
-  function ler(chave, padrao) {
-    try {
-      const bruto = persistente ? localStorage.getItem(PREFIXO + chave) : memoria.get(chave);
-      return bruto ? JSON.parse(bruto) : padrao;
-    } catch (e) { return padrao; }
-  }
-  function salvar(chave, valor) {
-    const bruto = JSON.stringify(valor);
-    try {
-      if (persistente) localStorage.setItem(PREFIXO + chave, bruto);
-      else memoria.set(chave, bruto);
-      return true;
-    } catch (e) { memoria.set(chave, bruto); return true; }
-  }
-  function apagar(chave) {
-    if (persistente) localStorage.removeItem(PREFIXO + chave);
-    memoria.delete(chave);
-  }
-  function tudo() {
-    const pacote = { app: 'Ecossistema Psicothica', versao: 1, exportadoEm: new Date().toISOString(), dados: {} };
-    const adicionar = (chave, bruto) => { try { pacote.dados[chave] = JSON.parse(bruto); } catch (e) {} };
-    if (persistente) {
-      for (let i = 0; i < localStorage.length; i++) {
-        const k = localStorage.key(i);
-        if (k && k.startsWith(PREFIXO)) adicionar(k.slice(PREFIXO.length), localStorage.getItem(k));
-      }
-    } else {
-      memoria.forEach((bruto, chave) => adicionar(chave, bruto));
-    }
-    return pacote;
-  }
-  function exportar(nomeArquivo) {
-    const blob = new Blob([JSON.stringify(tudo(), null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = nomeArquivo || `psicothica-${new Date().toISOString().slice(0, 10)}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-  }
-  function importar(arquivo) {
-    return new Promise((resolve, reject) => {
-      const leitor = new FileReader();
-      leitor.onload = () => {
-        try {
-          const pacote = JSON.parse(leitor.result);
-          if (!pacote || typeof pacote.dados !== 'object') return reject(new Error('Este arquivo não é um backup do Psicothica.'));
-          Object.entries(pacote.dados).forEach(([k, v]) => salvar(k, v));
-          resolve(Object.keys(pacote.dados).length);
-        } catch (e) { reject(new Error('Não foi possível ler o arquivo. Verifique se ele está íntegro.')); }
-      };
-      leitor.onerror = () => reject(new Error('Falha ao abrir o arquivo.'));
-      leitor.readAsText(arquivo);
-    });
-  }
-  return { ler, salvar, apagar, tudo, exportar, importar, persistente };
-})();
-
-/* ============================================================
    A BALANÇA DA DECISÃO — lógica
    Opções · prós/contras ponderados · intuição · comparação
    ============================================================ */
 (function () {
   'use strict';
-  const dados = window.Psicothica.dados;
   const $ = s => document.querySelector(s);
 
+  /* ---------- armazenamento: psi-storage (prefixo psi.balanca-da-decisao.v1.) ---------- */
+  const APP_SLUG = 'balanca-da-decisao';
+  const dados = PsiStorage.create({ slug: APP_SLUG, appName: 'A Balança da Decisão', version: '1.0.0' });
   const CHAVE_LISTA = 'decisoes:lista';
   const CHAVE_ATUAL = 'decisoes:atual';
+
+  /* Migração ÚNICA das chaves antigas DESTE app (antes do kit usavam o prefixo genérico "psicothica:").
+     Só estas duas chaves são tocadas. Nada de outro app (ex.: psicothica:nutrimente:*) é lido, movido ou
+     apagado. Ordem: copiar -> conferir a cópia -> só então remover a chave antiga. */
+  (function migrarChavesAntigas() {
+    if (!dados.persistent) return;
+    const antigas = [
+      { de: 'psicothica:decisoes:lista', para: CHAVE_LISTA },
+      { de: 'psicothica:decisoes:atual', para: CHAVE_ATUAL }
+    ];
+    try {
+      const conferidas = [];
+      let falhou = false;
+      antigas.forEach(k => {
+        const bruto = localStorage.getItem(k.de);
+        if (bruto === null) return;
+        const destino = dados.prefix + k.para;
+        if (localStorage.getItem(destino) === null) localStorage.setItem(destino, bruto);
+        // conferência: o que está no destino precisa ser idêntico ao que existe na chave antiga
+        if (localStorage.getItem(destino) === bruto) conferidas.push({ from: k.de, to: k.para });
+        else falhou = true;
+      });
+      // migrate() remove as chaves antigas conferidas e marca a migração como feita (não repete).
+      // Se algo falhou, não marca: tenta de novo na próxima abertura e as antigas continuam intactas.
+      if (!falhou) dados.migrate(conferidas);
+    } catch (e) { /* storage indisponível no meio do caminho: o aviso do helper já cobre */ }
+  })();
   const PESO_MIN = 1, PESO_MAX = 5, PESO_PADRAO = 3;
 
   let estado = { decisoes: [], atualId: null };
@@ -741,8 +730,8 @@ window.Psicothica.dados = (function () {
     return { somaPros, somaContras, saldo: somaPros - somaContras };
   }
   function salvar() {
-    dados.salvar(CHAVE_LISTA, estado.decisoes);
-    dados.salvar(CHAVE_ATUAL, estado.atualId);
+    dados.set(CHAVE_LISTA, estado.decisoes);
+    dados.set(CHAVE_ATUAL, estado.atualId);
   }
 
   /* ---------- render: workspace (Minha decisão) ---------- */
@@ -1020,11 +1009,11 @@ window.Psicothica.dados = (function () {
 
   /* ---------- exportação PNG (Canvas 2D nativo, sem html2canvas) ---------- */
   const F = {
-    marca:      '800 20px "Syne", system-ui, sans-serif',
-    titulo:     '800 40px "Syne", system-ui, sans-serif',
+    marca:      '900 18px "Tektur", system-ui, sans-serif',
+    titulo:     '900 34px "Tektur", system-ui, sans-serif',
     meta:       '600 16px "Plus Jakarta Sans", system-ui, sans-serif',
-    opNome:     '700 24px "Syne", system-ui, sans-serif',
-    saldo:      '800 22px "Syne", system-ui, sans-serif',
+    opNome:     '900 21px "Tektur", system-ui, sans-serif',
+    saldo:      '900 20px "Tektur", system-ui, sans-serif',
     secHead:    '700 13px "Plus Jakarta Sans", system-ui, sans-serif',
     corpo:      '400 16px "Plus Jakarta Sans", system-ui, sans-serif',
     legenda:    '500 14px "Plus Jakarta Sans", system-ui, sans-serif',
@@ -1065,7 +1054,7 @@ window.Psicothica.dados = (function () {
     pgRoundRect(ctx, x, y, w, h, 18);
     ctx.fillStyle = 'rgba(255,255,255,0.05)'; ctx.fill();
     ctx.lineWidth = 1.5;
-    ctx.strokeStyle = destaque ? 'rgba(23,163,152,0.55)' : 'rgba(198,206,223,0.16)';
+    ctx.strokeStyle = destaque ? 'rgba(2,187,255,0.55)' : 'rgba(225,238,252,0.18)';
     ctx.stroke();
   }
   function pgLinha(ctx, x1, y1, x2, y2, cor, lw) {
@@ -1145,73 +1134,73 @@ window.Psicothica.dados = (function () {
     let cy = y + cardPad;
 
     ctx.textBaseline = 'top';
-    ctx.font = F.opNome; ctx.fillStyle = '#F4F6FB'; ctx.textAlign = 'left';
+    ctx.font = F.opNome; ctx.fillStyle = '#e1eefc'; ctx.textAlign = 'left';
     ctx.fillText(o.nome, cx, cy);
     const s = o.l.saldo;
     ctx.font = F.saldo;
-    ctx.fillStyle = s > 0 ? '#17A398' : (s < 0 ? '#FF4E86' : '#8D99B4');
+    ctx.fillStyle = s > 0 ? '#02bbff' : (s < 0 ? '#ec9eff' : '#b4c0d9');
     ctx.textAlign = 'right';
     ctx.fillText((s > 0 ? '+' : '') + s, x + w - cardPad, cy);
     ctx.textAlign = 'left';
     cy += 34 + 16;
 
     const barX = cx, barW = innerW, barY = cy, barH = 26, mid = barX + barW / 2;
-    pgRoundRect(ctx, barX, barY, barW, barH, 8); ctx.fillStyle = 'rgba(7,14,31,0.55)'; ctx.fill();
+    pgRoundRect(ctx, barX, barY, barW, barH, 8); ctx.fillStyle = 'rgba(15,20,42,0.55)'; ctx.fill();
     const wc = (o.l.somaContras / m.max) * (barW / 2);
     const wp = (o.l.somaPros / m.max) * (barW / 2);
-    if (wc > 0) { pgRoundRect(ctx, mid - wc, barY, wc, barH, 6); ctx.fillStyle = '#D11A5B'; ctx.fill(); }
-    if (wp > 0) { pgRoundRect(ctx, mid, barY, wp, barH, 6); ctx.fillStyle = '#17A398'; ctx.fill(); }
+    if (wc > 0) { pgRoundRect(ctx, mid - wc, barY, wc, barH, 6); ctx.fillStyle = '#ce57df'; ctx.fill(); }
+    if (wp > 0) { pgRoundRect(ctx, mid, barY, wp, barH, 6); ctx.fillStyle = '#02bbff'; ctx.fill(); }
     pgLinha(ctx, mid, barY - 2, mid, barY + barH + 2, 'rgba(244,246,251,0.35)', 2);
     cy += barH + 8;
 
-    ctx.font = F.legenda; ctx.fillStyle = '#8D99B4';
+    ctx.font = F.legenda; ctx.fillStyle = '#b4c0d9';
     ctx.fillText('contras ' + o.l.somaContras, barX, cy);
     ctx.textAlign = 'right'; ctx.fillText('prós ' + o.l.somaPros, barX + barW, cy); ctx.textAlign = 'left';
     cy += 20 + 12;
 
-    ctx.font = F.corpo; ctx.fillStyle = '#C6CEDF';
+    ctx.font = F.corpo; ctx.fillStyle = '#b4c0d9';
     ctx.fillText('vontade: ' + o.l.op.intuicao + '/10', cx, cy);
     cy += 22 + 20;
 
-    ctx.font = F.secHead; ctx.fillStyle = '#17A398';
+    ctx.font = F.secHead; ctx.fillStyle = '#02bbff';
     ctx.fillText('PRÓS', cx, cy); cy += 20 + 6;
     ctx.font = F.corpo;
-    if (o.pros) { ctx.fillStyle = '#C6CEDF'; o.pros.forEach(g => g.forEach(ln => { ctx.fillText(ln, cx, cy); cy += 24; })); }
-    else { ctx.fillStyle = '#8D99B4'; ctx.fillText('nenhum registrado', cx, cy); cy += 24; }
+    if (o.pros) { ctx.fillStyle = '#b4c0d9'; o.pros.forEach(g => g.forEach(ln => { ctx.fillText(ln, cx, cy); cy += 24; })); }
+    else { ctx.fillStyle = '#b4c0d9'; ctx.fillText('nenhum registrado', cx, cy); cy += 24; }
     cy += 14;
 
-    ctx.font = F.secHead; ctx.fillStyle = '#FF4E86';
+    ctx.font = F.secHead; ctx.fillStyle = '#ec9eff';
     ctx.fillText('CONTRAS', cx, cy); cy += 20 + 6;
     ctx.font = F.corpo;
-    if (o.contras) { ctx.fillStyle = '#C6CEDF'; o.contras.forEach(g => g.forEach(ln => { ctx.fillText(ln, cx, cy); cy += 24; })); }
-    else { ctx.fillStyle = '#8D99B4'; ctx.fillText('nenhum registrado', cx, cy); cy += 24; }
+    if (o.contras) { ctx.fillStyle = '#b4c0d9'; o.contras.forEach(g => g.forEach(ln => { ctx.fillText(ln, cx, cy); cy += 24; })); }
+    else { ctx.fillStyle = '#b4c0d9'; ctx.fillText('nenhum registrado', cx, cy); cy += 24; }
   }
 
   function pgDesenhar(ctx, m, d) {
     const { W, PAD, contentW, cardPad, totalH } = m;
 
     const g = ctx.createLinearGradient(0, 0, 0, totalH);
-    g.addColorStop(0, '#0B132B'); g.addColorStop(0.5, '#0A1E2E'); g.addColorStop(1, '#0B2524');
+    g.addColorStop(0, '#04223d'); g.addColorStop(1, '#0f142a');
     ctx.fillStyle = g; ctx.fillRect(0, 0, W, totalH);
-    pgGlow(ctx, W * 0.1, 20, 640, 'rgba(0,59,54,0.45)');
-    pgGlow(ctx, W * 0.95, 60, 620, 'rgba(92,6,28,0.4)');
+    pgGlow(ctx, W * 0.1, 20, 640, 'rgba(19,1,105,0.5)');
+    pgGlow(ctx, W * 0.95, 60, 620, 'rgba(177,4,220,0.3)');
 
     ctx.textBaseline = 'top'; ctx.textAlign = 'left';
-    ctx.fillStyle = '#FF4E86'; pgCirculo(ctx, PAD + 7, m.marcaY + 8, 6);
-    ctx.font = F.marca; ctx.fillStyle = '#F4F6FB';
+    ctx.fillStyle = '#ec9eff'; pgCirculo(ctx, PAD + 7, m.marcaY + 8, 6);
+    ctx.font = F.marca; ctx.fillStyle = '#e1eefc';
     ctx.fillText('A BALANÇA DA DECISÃO', PAD + 22, m.marcaY);
     const mw = ctx.measureText('A BALANÇA DA DECISÃO').width;
-    ctx.font = F.meta; ctx.fillStyle = '#8D99B4';
+    ctx.font = F.meta; ctx.fillStyle = '#b4c0d9';
     ctx.fillText('  ·  Psicothica', PAD + 22 + mw, m.marcaY + 4);
 
-    ctx.font = F.titulo; ctx.fillStyle = '#F4F6FB';
+    ctx.font = F.titulo; ctx.fillStyle = '#e1eefc';
     let ty = m.tituloY; m.tituloLines.forEach(ln => { ctx.fillText(ln, PAD, ty); ty += 46; });
 
     const nOp = d.opcoes.length;
-    ctx.font = F.meta; ctx.fillStyle = '#8D99B4';
+    ctx.font = F.meta; ctx.fillStyle = '#b4c0d9';
     ctx.fillText(dataCurta(d.criadaEm) + '  ·  ' + nOp + ' opç' + (nOp === 1 ? 'ão' : 'ões'), PAD, m.metaY);
 
-    pgLinha(ctx, PAD, m.dividerY, W - PAD, m.dividerY, 'rgba(198,206,223,0.16)');
+    pgLinha(ctx, PAD, m.dividerY, W - PAD, m.dividerY, 'rgba(225,238,252,0.18)');
 
     m.opcoes.forEach(o => pgDesenharOpcao(ctx, m, o));
 
@@ -1220,21 +1209,21 @@ window.Psicothica.dados = (function () {
       pgCartao(ctx, x, y, contentW, m.reflexao.cardH, false);
       const cx = x + cardPad; let cy = y + cardPad;
       ctx.textAlign = 'left'; ctx.textBaseline = 'top';
-      ctx.font = F.secHead; ctx.fillStyle = '#FF4E86';
+      ctx.font = F.secHead; ctx.fillStyle = '#ec9eff';
       ctx.fillText('REFLEXÃO · TESTE DA INTUIÇÃO', cx, cy); cy += 20 + 8;
-      ctx.font = F.corpo; ctx.fillStyle = '#C6CEDF';
+      ctx.font = F.corpo; ctx.fillStyle = '#b4c0d9';
       m.reflexao.lines.forEach(ln => { ctx.fillText(ln, cx, cy); cy += 24; });
     }
 
-    pgLinha(ctx, PAD, m.footerDividerY, W - PAD, m.footerDividerY, 'rgba(198,206,223,0.16)');
+    pgLinha(ctx, PAD, m.footerDividerY, W - PAD, m.footerDividerY, 'rgba(225,238,252,0.18)');
     let fy = m.footerY;
-    ctx.font = F.rodapeForte; ctx.fillStyle = '#C6CEDF';
+    ctx.font = F.rodapeForte; ctx.fillStyle = '#b4c0d9';
     m.footerNome.forEach(ln => { ctx.fillText(ln, PAD, fy); fy += 22; });
     fy += 8;
-    ctx.font = F.rodape; ctx.fillStyle = '#8D99B4';
+    ctx.font = F.rodape; ctx.fillStyle = '#b4c0d9';
     m.footerAviso.forEach(ln => { ctx.fillText(ln, PAD, fy); fy += 20; });
     fy += 10;
-    ctx.fillStyle = '#FF4E86';
+    ctx.fillStyle = '#ec9eff';
     ctx.fillText(m.footerContato, PAD, fy);
   }
 
@@ -1245,8 +1234,8 @@ window.Psicothica.dados = (function () {
     try {
       try {
         await Promise.all([
-          document.fonts.load('800 40px "Syne"'),
-          document.fonts.load('700 24px "Syne"'),
+          document.fonts.load('900 34px "Tektur"'),
+          document.fonts.load('900 21px "Tektur"'),
           document.fonts.load('400 16px "Plus Jakarta Sans"'),
           document.fonts.load('600 16px "Plus Jakarta Sans"')
         ]);
@@ -1403,7 +1392,7 @@ window.Psicothica.dados = (function () {
       if (estado.atualId === id) estado.atualId = (estado.decisoes[0] && estado.decisoes[0].id) || null;
       salvar(); renderTudo(); return;
     }
-    if (acao === 'exportar') { dados.exportar('psicothica-decisoes.json'); return; }
+    if (acao === 'exportar') { dados.download(); return; }
     if (acao === 'importar') { campoArquivo.click(); return; }
     if (acao === 'baixar-resumo') { baixarResumo(); return; }
     if (acao === 'baixar-png') { baixarPng(btn); return; }
@@ -1432,33 +1421,55 @@ window.Psicothica.dados = (function () {
   });
 
   /* ---------- importação de backup ---------- */
+  // Aceita o arquivo novo (psi-storage, só deste app) e o formato antigo da Balança
+  // ({ app: "Ecossistema Psicothica", dados: { "decisoes:lista": ... } }), convertido na hora.
+  // Arquivo de OUTRO app é recusado com mensagem clara, sem gravar nada.
+  function lerTexto(arquivo) {
+    return new Promise((resolve, reject) => {
+      const leitor = new FileReader();
+      leitor.onload = () => resolve(String(leitor.result));
+      leitor.onerror = () => reject(new Error('Falha ao abrir o arquivo.'));
+      leitor.readAsText(arquivo);
+    });
+  }
+  async function importarBackup(arquivo) {
+    const texto = await lerTexto(arquivo);
+    let pacote;
+    try { pacote = JSON.parse(texto); }
+    catch (e) { throw new Error('Não foi possível ler o arquivo. Verifique se ele está íntegro.'); }
+    if (pacote && pacote.kit === 'psicothica-kit') { dados.importJSON(pacote); return { formato: 'novo', ignoradas: 0 }; }
+    if (pacote && pacote.app === 'Ecossistema Psicothica' && pacote.dados && typeof pacote.dados === 'object') {
+      const nossas = [CHAVE_LISTA, CHAVE_ATUAL].filter(k => Object.prototype.hasOwnProperty.call(pacote.dados, k));
+      if (!nossas.includes(CHAVE_LISTA)) throw new Error('Este arquivo não tem decisões da Balança. Nada foi importado.');
+      const data = {};
+      nossas.forEach(k => { data[k] = pacote.dados[k]; });
+      dados.importJSON({ kit: 'psicothica-kit', app: APP_SLUG, data });
+      return { formato: 'antigo', ignoradas: Object.keys(pacote.dados).length - nossas.length };
+    }
+    throw new Error('Este arquivo não é um backup da Balança da Decisão. Nada foi importado.');
+  }
   campoArquivo.addEventListener('change', async e => {
     const arquivo = e.target.files[0];
     if (!arquivo) return;
     try {
-      await dados.importar(arquivo);
-      estado.decisoes = dados.ler(CHAVE_LISTA, []);
-      estado.atualId = dados.ler(CHAVE_ATUAL, null);
+      const r = await importarBackup(arquivo);
+      estado.decisoes = dados.get(CHAVE_LISTA, []);
+      if (!Array.isArray(estado.decisoes)) estado.decisoes = [];
+      estado.atualId = dados.get(CHAVE_ATUAL, null);
       if (!decisaoAtual()) estado.atualId = (estado.decisoes[0] && estado.decisoes[0].id) || null;
       salvar(); renderTudo();
-      try { window.alert('Backup restaurado.'); } catch (err) {}
+      let msg = 'Backup restaurado.';
+      if (r.formato === 'antigo') msg += ' (Formato antigo convertido' + (r.ignoradas ? '; ' + r.ignoradas + ' item(ns) que não eram da Balança foram ignorados' : '') + '.)';
+      try { window.alert(msg); } catch (err) {}
     } catch (erro) {
       try { window.alert(erro.message); } catch (err) {}
     }
     e.target.value = '';
   });
 
-  /* ---------- aviso de armazenamento bloqueado ---------- */
-  if (!dados.persistente) {
-    const slot = $('#aviso-armazenamento-slot');
-    if (slot) {
-      slot.innerHTML = '<div class="aviso aviso-armazenamento"><p><strong>Este navegador está bloqueando o armazenamento local.</strong> Você pode usar a ferramenta normalmente, mas as decisões duram só enquanto esta aba estiver aberta. Exporte o backup antes de fechar, ou abra o app em uma janela normal do navegador.</p></div>';
-    }
-  }
-
   /* ---------- inicialização ---------- */
-  estado.decisoes = dados.ler(CHAVE_LISTA, []);
-  estado.atualId = dados.ler(CHAVE_ATUAL, null);
+  estado.decisoes = dados.get(CHAVE_LISTA, []);
+  estado.atualId = dados.get(CHAVE_ATUAL, null);
   if (!Array.isArray(estado.decisoes)) estado.decisoes = [];
   if (estado.decisoes.length === 0) {
     const d = novaDecisao(); estado.decisoes.push(d); estado.atualId = d.id; salvar();
