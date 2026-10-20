@@ -39,3 +39,7 @@ Todos os apps do Psicothica dividem a origem `psicothica.github.io`; por isso es
 ```bash
 python -m http.server 8000     # e abra http://localhost:8000/
 ```
+
+## Direitos autorais
+
+Copyright (c) 2026 Alanne Raquel Fragoso de Farias. Todos os direitos reservados. Nenhuma parte deste software ou do seu conteúdo pode ser copiada, modificada, distribuída ou usada para fins comerciais sem autorização prévia e por escrito da autora.
